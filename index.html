@@ -2,7 +2,6 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -193,15 +192,11 @@
         input,
         select,
         textarea {
-
             width: 100%;
             padding: 11px;
-
             border: 1px solid #cbd5e1;
             border-radius: 8px;
-
             font-size: 14px;
-
             background: white;
         }
 
@@ -247,7 +242,7 @@
         }
 
         /* =========================
-           CALENDAR
+           CALENDARIO
         ========================= */
 
         .calendar-card {
@@ -330,7 +325,9 @@
             opacity: .85;
         }
 
-        /* COLORES */
+        /* =========================
+           ESTADOS
+        ========================= */
 
         .estado-PLANEADO {
             background: #2196f3;
@@ -486,9 +483,7 @@
 
 </head>
 
-
 <body>
-
 
 <!-- =====================================================
      LOGIN
@@ -524,7 +519,6 @@
 
         </div>
 
-
         <div class="form-group">
 
             <label>
@@ -539,7 +533,6 @@
 
         </div>
 
-
         <button
             class="btn-primary"
             style="width:100%"
@@ -547,7 +540,6 @@
         >
             🔐 Ingresar
         </button>
-
 
         <div
             id="loginMessage"
@@ -565,15 +557,11 @@
 
 <div id="app">
 
-
     <div class="topbar">
 
         <div class="topbar-title">
-
             ⚡ PLANIFICADOR DE PERMISOS OPERATIVOS
-
         </div>
-
 
         <div class="topbar-user">
 
@@ -593,13 +581,9 @@
 
     <div class="container">
 
-
-        <!-- =========================
-             INDICADORES
-        ========================= -->
+        <!-- INDICADORES -->
 
         <div class="dashboard">
-
 
             <div class="stat-card stat-planeado">
 
@@ -664,16 +648,12 @@
 
             </div>
 
-
         </div>
 
 
-        <!-- =========================
-             FILTROS
-        ========================= -->
+        <!-- FILTROS -->
 
         <div class="toolbar">
-
 
             <input
                 type="text"
@@ -681,7 +661,6 @@
                 placeholder="🔎 Buscar PO, actividad, municipio, alimentador..."
                 oninput="renderCalendar()"
             >
-
 
             <select
                 id="filterEstado"
@@ -718,21 +697,16 @@
                 + Nuevo permiso
             </button>
 
-
         </div>
 
 
-        <!-- =========================
-             CALENDARIO
-        ========================= -->
+        <!-- CALENDARIO -->
 
         <div class="calendar-card">
-
 
             <div class="calendar-header">
 
                 <h2 id="monthTitle"></h2>
-
 
                 <div class="calendar-buttons">
 
@@ -758,18 +732,13 @@
                 <div
                     class="calendar"
                     id="calendar"
-                >
-
-                </div>
+                ></div>
 
             </div>
 
-
         </div>
 
-
     </div>
-
 
 </div>
 
@@ -784,7 +753,6 @@
 >
 
     <div class="modal-content">
-
 
         <div class="modal-header">
 
@@ -809,7 +777,6 @@
 
 
         <div class="form-grid">
-
 
             <div class="form-group">
 
@@ -1057,7 +1024,6 @@
 
             </div>
 
-
         </div>
 
 
@@ -1085,7 +1051,6 @@
 
         </div>
 
-
     </div>
 
 </div>
@@ -1093,18 +1058,30 @@
 
 <script>
 
-
 /* =====================================================
    CONFIGURACIÓN SUPABASE
 ===================================================== */
 
-const SUPABASE_URL =
-    "https://hdbpwaxzthumsflvmkm.supabase.co";
+/*
+   IMPORTANTE:
+   Esta es la URL CORRECTA de tu proyecto.
+*/
 
+const SUPABASE_URL =
+    "https://lhdbpwaxzthumsflvmkm.supabase.co";
+
+
+/*
+   Publishable key de tu proyecto.
+*/
 
 const SUPABASE_KEY =
     "sb_publishable_86bRK3rezZLTS7B7AVOv-g_hlT_XAiE";
 
+
+/*
+   Crear conexión con Supabase.
+*/
 
 const supabaseClient =
     window.supabase.createClient(
@@ -1131,10 +1108,15 @@ let editingId = null;
 async function login() {
 
     const email =
-        document.getElementById("loginEmail").value.trim();
+        document
+            .getElementById("loginEmail")
+            .value
+            .trim();
 
     const password =
-        document.getElementById("loginPassword").value;
+        document
+            .getElementById("loginPassword")
+            .value;
 
 
     if (!email || !password) {
@@ -1147,28 +1129,43 @@ async function login() {
     }
 
 
-    const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
+    try {
 
-            email: email,
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.signInWithPassword({
 
-            password: password
+                email: email,
 
-        });
+                password: password
+
+            });
 
 
-    if (error) {
+        if (error) {
+
+            showLoginMessage(
+                "No fue posible iniciar sesión: " +
+                error.message
+            );
+
+            return;
+        }
+
+
+        showApplication(data.user);
+
+
+    } catch (error) {
 
         showLoginMessage(
-            "No fue posible iniciar sesión: " +
+            "Error de conexión con Supabase: " +
             error.message
         );
 
-        return;
     }
-
-
-    showApplication(data.user);
 
 }
 
@@ -1220,12 +1217,17 @@ async function logout() {
 function showLoginMessage(message) {
 
     const box =
-        document.getElementById("loginMessage");
+        document.getElementById(
+            "loginMessage"
+        );
 
 
-    box.textContent = message;
+    box.textContent =
+        message;
 
-    box.style.display = "block";
+
+    box.style.display =
+        "block";
 
 }
 
@@ -1236,7 +1238,10 @@ function showLoginMessage(message) {
 
 async function loadPermissions() {
 
-    const { data, error } =
+    const {
+        data,
+        error
+    } =
         await supabaseClient
             .from("permisos")
             .select("*")
@@ -1259,7 +1264,8 @@ async function loadPermissions() {
     }
 
 
-    permisos = data || [];
+    permisos =
+        data || [];
 
 
     updateDashboard();
@@ -1275,31 +1281,39 @@ async function loadPermissions() {
 
 function updateDashboard() {
 
-    document.getElementById("countPlaneado")
+    document
+        .getElementById("countPlaneado")
         .textContent =
         permisos.filter(
-            p => p.estado === "PLANEADO"
+            p =>
+                p.estado === "PLANEADO"
         ).length;
 
 
-    document.getElementById("countSolicitado")
+    document
+        .getElementById("countSolicitado")
         .textContent =
         permisos.filter(
-            p => p.estado === "SOLICITADO"
+            p =>
+                p.estado === "SOLICITADO"
         ).length;
 
 
-    document.getElementById("countAprobado")
+    document
+        .getElementById("countAprobado")
         .textContent =
         permisos.filter(
-            p => p.estado === "APROBADO"
+            p =>
+                p.estado === "APROBADO"
         ).length;
 
 
-    document.getElementById("countEjecutado")
+    document
+        .getElementById("countEjecutado")
         .textContent =
         permisos.filter(
-            p => p.estado === "EJECUTADO"
+            p =>
+                p.estado === "EJECUTADO"
         ).length;
 
 }
@@ -1312,7 +1326,9 @@ function updateDashboard() {
 function renderCalendar() {
 
     const calendar =
-        document.getElementById("calendar");
+        document.getElementById(
+            "calendar"
+        );
 
 
     calendar.innerHTML = "";
@@ -1320,6 +1336,7 @@ function renderCalendar() {
 
     const year =
         currentDate.getFullYear();
+
 
     const month =
         currentDate.getMonth();
@@ -1335,7 +1352,8 @@ function renderCalendar() {
         );
 
 
-    document.getElementById("monthTitle")
+    document
+        .getElementById("monthTitle")
         .textContent =
         monthName;
 
@@ -1356,13 +1374,22 @@ function renderCalendar() {
     weekdays.forEach(day => {
 
         const header =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        header.className = "weekday";
 
-        header.textContent = day;
+        header.className =
+            "weekday";
 
-        calendar.appendChild(header);
+
+        header.textContent =
+            day;
+
+
+        calendar.appendChild(
+            header
+        );
 
     });
 
@@ -1374,9 +1401,6 @@ function renderCalendar() {
             1
         ).getDay();
 
-
-    // Convertir domingo = 0
-    // a lunes = 0
 
     firstDay =
         firstDay === 0
@@ -1399,11 +1423,18 @@ function renderCalendar() {
     ) {
 
         const empty =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        empty.className = "day";
 
-        calendar.appendChild(empty);
+        empty.className =
+            "day";
+
+
+        calendar.appendChild(
+            empty
+        );
 
     }
 
@@ -1415,9 +1446,13 @@ function renderCalendar() {
     ) {
 
         const day =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        day.className = "day";
+
+        day.className =
+            "day";
 
 
         const dateString =
@@ -1436,24 +1471,35 @@ function renderCalendar() {
             );
 
 
-        if (dateString === today) {
+        if (
+            dateString ===
+            today
+        ) {
 
-            day.classList.add("today");
+            day.classList.add(
+                "today"
+            );
 
         }
 
 
         const number =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         number.className =
             "day-number";
+
 
         number.textContent =
             dayNumber;
 
 
-        day.appendChild(number);
+        day.appendChild(
+            number
+        );
 
 
         const events =
@@ -1465,51 +1511,56 @@ function renderCalendar() {
                 );
 
 
-        events.forEach(permission => {
+        events.forEach(
+            permission => {
 
-            const event =
-                document.createElement("div");
-
-
-            event.className =
-                "event estado-" +
-                permission.estado;
+                const event =
+                    document.createElement(
+                        "div"
+                    );
 
 
-            event.innerHTML =
+                event.className =
+                    "event estado-" +
+                    permission.estado;
 
-                "<strong>PO " +
 
-                escapeHtml(
-                    permission.numero_po || ""
-                ) +
+                event.innerHTML =
+                    "<strong>PO " +
+                    escapeHtml(
+                        permission.numero_po || ""
+                    ) +
+                    "</strong><br>" +
+                    escapeHtml(
+                        permission.actividad || ""
+                    );
 
-                "</strong><br>" +
 
-                escapeHtml(
-                    permission.actividad || ""
+                event.title =
+                    "Haz clic para editar";
+
+
+                event.onclick =
+                    () => {
+
+                        openEditPermission(
+                            permission
+                        );
+
+                    };
+
+
+                day.appendChild(
+                    event
                 );
 
-
-            event.title =
-                "Haz clic para editar";
-
-
-            event.onclick = () => {
-
-                openEditPermission(
-                    permission
-                );
-
-            };
+            }
+        );
 
 
-            day.appendChild(event);
-
-        });
-
-
-        calendar.appendChild(day);
+        calendar.appendChild(
+            day
+        );
 
     }
 
@@ -1523,62 +1574,61 @@ function renderCalendar() {
 function getFilteredPermissions() {
 
     const search =
-        document.getElementById(
-            "searchInput"
-        ).value
-        .toLowerCase()
-        .trim();
+        document
+            .getElementById(
+                "searchInput"
+            )
+            .value
+            .toLowerCase()
+            .trim();
 
 
     const estado =
-        document.getElementById(
-            "filterEstado"
-        ).value;
+        document
+            .getElementById(
+                "filterEstado"
+            )
+            .value;
 
 
-    return permisos.filter(permission => {
+    return permisos.filter(
+        permission => {
 
-        const text = [
+            const text = [
 
-            permission.numero_po,
+                permission.numero_po,
+                permission.actividad,
+                permission.municipio,
+                permission.zona,
+                permission.alimentador,
+                permission.cto,
+                permission.responsable,
+                permission.contratista,
+                permission.planeador
 
-            permission.actividad,
-
-            permission.municipio,
-
-            permission.zona,
-
-            permission.alimentador,
-
-            permission.cto,
-
-            permission.responsable,
-
-            permission.contratista,
-
-            permission.planeador
-
-        ]
-        .join(" ")
-        .toLowerCase();
+            ]
+            .join(" ")
+            .toLowerCase();
 
 
-        const matchesSearch =
-            !search ||
-            text.includes(search);
+            const matchesSearch =
+                !search ||
+                text.includes(search);
 
 
-        const matchesEstado =
-            !estado ||
-            permission.estado === estado;
+            const matchesEstado =
+                !estado ||
+                permission.estado ===
+                estado;
 
 
-        return (
-            matchesSearch &&
-            matchesEstado
-        );
+            return (
+                matchesSearch &&
+                matchesEstado
+            );
 
-    });
+        }
+    );
 
 }
 
@@ -1589,33 +1639,44 @@ function getFilteredPermissions() {
 
 function openNewPermission() {
 
-    editingId = null;
+    editingId =
+        null;
 
 
-    document.getElementById(
-        "modalTitle"
-    ).textContent =
+    document
+        .getElementById(
+            "modalTitle"
+        )
+        .textContent =
         "Nuevo permiso operativo";
 
 
     clearForm();
 
 
-    document.getElementById(
-        "estado"
-    ).value =
+    document
+        .getElementById(
+            "estado"
+        )
+        .value =
         "PLANEADO";
 
 
-    document.getElementById(
-        "fecha_ejecucion"
-    ).value =
-        formatDate(new Date());
+    document
+        .getElementById(
+            "fecha_ejecucion"
+        )
+        .value =
+        formatDate(
+            new Date()
+        );
 
 
-    document.getElementById(
-        "permissionModal"
-    ).style.display =
+    document
+        .getElementById(
+            "permissionModal"
+        )
+        .style.display =
         "block";
 
 }
@@ -1625,21 +1686,27 @@ function openNewPermission() {
    EDITAR PERMISO
 ===================================================== */
 
-function openEditPermission(permission) {
+function openEditPermission(
+    permission
+) {
 
     editingId =
         permission.id;
 
 
-    document.getElementById(
-        "modalTitle"
-    ).textContent =
+    document
+        .getElementById(
+            "modalTitle"
+        )
+        .textContent =
         "Editar permiso operativo";
 
 
-    document.getElementById(
-        "permissionId"
-    ).value =
+    document
+        .getElementById(
+            "permissionId"
+        )
+        .value =
         permission.id;
 
 
@@ -1745,9 +1812,11 @@ function openEditPermission(permission) {
     );
 
 
-    document.getElementById(
-        "permissionModal"
-    ).style.display =
+    document
+        .getElementById(
+            "permissionModal"
+        )
+        .style.display =
         "block";
 
 }
@@ -1762,55 +1831,89 @@ async function savePermission() {
     const data = {
 
         numero_po:
-            getValue("numero_po"),
+            getValue(
+                "numero_po"
+            ),
 
         actividad:
-            getValue("actividad"),
+            getValue(
+                "actividad"
+            ),
 
         fecha_ejecucion:
-            getValue("fecha_ejecucion") || null,
+            getValue(
+                "fecha_ejecucion"
+            ) || null,
 
         hora_inicio:
-            getValue("hora_inicio") || null,
+            getValue(
+                "hora_inicio"
+            ) || null,
 
         hora_fin:
-            getValue("hora_fin") || null,
+            getValue(
+                "hora_fin"
+            ) || null,
 
         municipio:
-            getValue("municipio"),
+            getValue(
+                "municipio"
+            ),
 
         zona:
-            getValue("zona"),
+            getValue(
+                "zona"
+            ),
 
         alimentador:
-            getValue("alimentador"),
+            getValue(
+                "alimentador"
+            ),
 
         cto:
-            getValue("cto"),
+            getValue(
+                "cto"
+            ),
 
         responsable:
-            getValue("responsable"),
+            getValue(
+                "responsable"
+            ),
 
         contratista:
-            getValue("contratista"),
+            getValue(
+                "contratista"
+            ),
 
         planeador:
-            getValue("planeador"),
+            getValue(
+                "planeador"
+            ),
 
         estado:
-            getValue("estado"),
+            getValue(
+                "estado"
+            ),
 
         fecha_solicitud:
-            getValue("fecha_solicitud") || null,
+            getValue(
+                "fecha_solicitud"
+            ) || null,
 
         fecha_aprobacion:
-            getValue("fecha_aprobacion") || null,
+            getValue(
+                "fecha_aprobacion"
+            ) || null,
 
         fecha_ejecucion_real:
-            getValue("fecha_ejecucion_real") || null,
+            getValue(
+                "fecha_ejecucion_real"
+            ) || null,
 
         observaciones:
-            getValue("observaciones")
+            getValue(
+                "observaciones"
+            )
 
     };
 
@@ -1845,7 +1948,9 @@ async function savePermission() {
         result =
             await supabaseClient
                 .from("permisos")
-                .insert([data]);
+                .insert([
+                    data
+                ]);
 
     }
 
@@ -1945,24 +2050,31 @@ function clearForm() {
     ];
 
 
-    fields.forEach(id => {
+    fields.forEach(
+        id => {
 
-        const element =
-            document.getElementById(id);
+            const element =
+                document.getElementById(
+                    id
+                );
 
 
-        if (element) {
+            if (element) {
 
-            element.value = "";
+                element.value =
+                    "";
+
+            }
 
         }
+    );
 
-    });
 
-
-    document.getElementById(
-        "formMessage"
-    ).style.display =
+    document
+        .getElementById(
+            "formMessage"
+        )
+        .style.display =
         "none";
 
 }
@@ -1974,9 +2086,11 @@ function clearForm() {
 
 function closeModal() {
 
-    document.getElementById(
-        "permissionModal"
-    ).style.display =
+    document
+        .getElementById(
+            "permissionModal"
+        )
+        .style.display =
         "none";
 
 }
@@ -2038,7 +2152,9 @@ function setValue(
 ) {
 
     const element =
-        document.getElementById(id);
+        document.getElementById(
+            id
+        );
 
 
     if (element) {
@@ -2056,15 +2172,23 @@ function formatDate(date) {
     const year =
         date.getFullYear();
 
+
     const month =
         String(
             date.getMonth() + 1
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
+
 
     const day =
         String(
             date.getDate()
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
 
 
     return `${year}-${month}-${day}`;
@@ -2074,8 +2198,10 @@ function formatDate(date) {
 
 function escapeHtml(value) {
 
-    if (value === null ||
-        value === undefined) {
+    if (
+        value === null ||
+        value === undefined
+    ) {
 
         return "";
 
@@ -2084,15 +2210,30 @@ function escapeHtml(value) {
 
     return String(value)
 
-        .replaceAll("&", "&amp;")
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
 
-        .replaceAll("<", "&lt;")
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
 
-        .replaceAll(">", "&gt;")
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
 
-        .replaceAll('"', "&quot;")
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
 
-        .replaceAll("'", "&#039;");
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
 
@@ -2104,11 +2245,24 @@ function escapeHtml(value) {
 async function checkSession() {
 
     const {
-        data
+        data,
+        error
     } =
         await supabaseClient
             .auth
             .getSession();
+
+
+    if (error) {
+
+        console.error(
+            "Error comprobando sesión:",
+            error.message
+        );
+
+        return;
+
+    }
 
 
     if (
@@ -2127,24 +2281,57 @@ async function checkSession() {
 
 
 /* =====================================================
-   ACTUALIZAR AUTOMÁTICAMENTE
+   ESCUCHAR CAMBIOS DE SESIÓN
 ===================================================== */
 
 supabaseClient
-    .channel("permisos-realtime")
+    .auth
+    .onAuthStateChange(
+        (event, session) => {
+
+            if (
+                event === "SIGNED_IN" &&
+                session &&
+                session.user
+            ) {
+
+                showApplication(
+                    session.user
+                );
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   ACTUALIZACIÓN AUTOMÁTICA
+===================================================== */
+
+supabaseClient
+
+    .channel(
+        "permisos-realtime"
+    )
+
     .on(
         "postgres_changes",
+
         {
             event: "*",
             schema: "public",
             table: "permisos"
         },
+
         () => {
 
             loadPermissions();
 
         }
+
     )
+
     .subscribe();
 
 
@@ -2153,7 +2340,6 @@ supabaseClient
 ===================================================== */
 
 checkSession();
-
 
 </script>
 
