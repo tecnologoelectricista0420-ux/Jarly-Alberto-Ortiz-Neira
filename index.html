@@ -3,9 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Permisos Operativos Regional Aguachica</title>
 
@@ -78,13 +76,13 @@
         }
 
         .topbar {
-            height: 70px;
+            min-height: 70px;
             background: #0f172a;
             color: white;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 25px;
+            padding: 12px 25px;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -109,6 +107,10 @@
             padding: 9px 15px;
             border-radius: 8px;
             cursor: pointer;
+        }
+
+        .btn-logout:hover {
+            background: #475569;
         }
 
         .container {
@@ -241,6 +243,23 @@
             border-radius: 8px;
         }
 
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
         /* =========================
            CALENDARIO
         ========================= */
@@ -311,6 +330,28 @@
             background: #eff6ff;
         }
 
+        /* =========================
+           FESTIVOS COLOMBIA
+        ========================= */
+
+        .holiday-day {
+            background: #fff7ed !important;
+        }
+
+        .holiday-name {
+            background: #f97316;
+            color: white;
+            padding: 4px 6px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* =========================
+           EVENTOS / PERMISOS
+        ========================= */
+
         .event {
             color: white;
             padding: 5px 7px;
@@ -324,10 +365,6 @@
         .event:hover {
             opacity: .85;
         }
-
-        /* =========================
-           ESTADOS
-        ========================= */
 
         .estado-PLANEADO {
             background: #2196f3;
@@ -386,7 +423,6 @@
             height: 35px;
             border-radius: 50%;
             font-size: 20px;
-            cursor: pointer;
         }
 
         .form-grid {
@@ -401,9 +437,14 @@
 
         .modal-actions {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             gap: 10px;
             margin-top: 20px;
+        }
+
+        .modal-actions-right {
+            display: flex;
+            gap: 10px;
         }
 
         /* =========================
@@ -428,6 +469,34 @@
         }
 
         /* =========================
+           LEYENDA
+        ========================= */
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+
+        .legend-holiday {
+            background: #f97316;
+        }
+
+        /* =========================
            RESPONSIVE
         ========================= */
 
@@ -440,7 +509,6 @@
             .day {
                 min-height: 100px;
             }
-
         }
 
         @media(max-width: 650px) {
@@ -477,6 +545,13 @@
                 grid-column: auto;
             }
 
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .modal-actions-right {
+                flex-direction: column;
+            }
         }
 
     </style>
@@ -484,6 +559,7 @@
 </head>
 
 <body>
+
 
 <!-- =====================================================
      LOGIN
@@ -581,7 +657,10 @@
 
     <div class="container">
 
-        <!-- INDICADORES -->
+
+        <!-- =========================
+             INDICADORES
+        ========================= -->
 
         <div class="dashboard">
 
@@ -651,7 +730,9 @@
         </div>
 
 
-        <!-- FILTROS -->
+        <!-- =========================
+             FILTROS
+        ========================= -->
 
         <div class="toolbar">
 
@@ -700,7 +781,9 @@
         </div>
 
 
-        <!-- CALENDARIO -->
+        <!-- =========================
+             CALENDARIO
+        ========================= -->
 
         <div class="calendar-card">
 
@@ -736,6 +819,52 @@
 
             </div>
 
+
+            <!-- LEYENDA -->
+
+            <div class="legend">
+
+                <div class="legend-item">
+                    <span
+                        class="legend-color"
+                        style="background:#2196f3"
+                    ></span>
+                    Planeado
+                </div>
+
+                <div class="legend-item">
+                    <span
+                        class="legend-color"
+                        style="background:#eab308"
+                    ></span>
+                    Solicitado
+                </div>
+
+                <div class="legend-item">
+                    <span
+                        class="legend-color"
+                        style="background:#9333ea"
+                    ></span>
+                    Aprobado
+                </div>
+
+                <div class="legend-item">
+                    <span
+                        class="legend-color"
+                        style="background:#16a34a"
+                    ></span>
+                    Ejecutado
+                </div>
+
+                <div class="legend-item">
+                    <span
+                        class="legend-color legend-holiday"
+                    ></span>
+                    Festivo Colombia
+                </div>
+
+            </div>
+
         </div>
 
     </div>
@@ -753,6 +882,7 @@
 >
 
     <div class="modal-content">
+
 
         <div class="modal-header">
 
@@ -777,6 +907,7 @@
 
 
         <div class="form-grid">
+
 
             <div class="form-group">
 
@@ -897,9 +1028,7 @@
                     Zona
                 </label>
 
-                <input
-                    id="zona"
-                >
+                <input id="zona">
 
             </div>
 
@@ -910,9 +1039,7 @@
                     Alimentador
                 </label>
 
-                <input
-                    id="alimentador"
-                >
+                <input id="alimentador">
 
             </div>
 
@@ -923,9 +1050,7 @@
                     CTO
                 </label>
 
-                <input
-                    id="cto"
-                >
+                <input id="cto">
 
             </div>
 
@@ -936,9 +1061,7 @@
                     Responsable
                 </label>
 
-                <input
-                    id="responsable"
-                >
+                <input id="responsable">
 
             </div>
 
@@ -949,9 +1072,7 @@
                     Contratista
                 </label>
 
-                <input
-                    id="contratista"
-                >
+                <input id="contratista">
 
             </div>
 
@@ -962,9 +1083,7 @@
                     Planeador
                 </label>
 
-                <input
-                    id="planeador"
-                >
+                <input id="planeador">
 
             </div>
 
@@ -1035,21 +1154,40 @@
 
         <div class="modal-actions">
 
-            <button
-                class="btn-secondary"
-                onclick="closeModal()"
-            >
-                Cancelar
-            </button>
+            <div>
 
-            <button
-                class="btn-primary"
-                onclick="savePermission()"
-            >
-                💾 Guardar permiso
-            </button>
+                <button
+                    id="btnEliminar"
+                    class="btn-danger"
+                    onclick="deletePermission()"
+                    style="display:none"
+                >
+                    🗑️ Eliminar permiso
+                </button>
+
+            </div>
+
+
+            <div class="modal-actions-right">
+
+                <button
+                    class="btn-secondary"
+                    onclick="closeModal()"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    class="btn-primary"
+                    onclick="savePermission()"
+                >
+                    💾 Guardar permiso
+                </button>
+
+            </div>
 
         </div>
+
 
     </div>
 
@@ -1058,30 +1196,16 @@
 
 <script>
 
+
 /* =====================================================
    CONFIGURACIÓN SUPABASE
 ===================================================== */
 
-/*
-   IMPORTANTE:
-   Esta es la URL CORRECTA de tu proyecto.
-*/
-
 const SUPABASE_URL =
     "https://lhdbpwaxzthumsflvmkm.supabase.co";
 
-
-/*
-   Publishable key de tu proyecto.
-*/
-
 const SUPABASE_KEY =
     "sb_publishable_86bRK3rezZLTS7B7AVOv-g_hlT_XAiE";
-
-
-/*
-   Crear conexión con Supabase.
-*/
 
 const supabaseClient =
     window.supabase.createClient(
@@ -1135,13 +1259,15 @@ async function login() {
             data,
             error
         } =
-            await supabaseClient.auth.signInWithPassword({
+            await supabaseClient
+                .auth
+                .signInWithPassword({
 
-                email: email,
+                    email: email,
 
-                password: password
+                    password: password
 
-            });
+                });
 
 
         if (error) {
@@ -1155,7 +1281,9 @@ async function login() {
         }
 
 
-        showApplication(data.user);
+        showApplication(
+            data.user
+        );
 
 
     } catch (error) {
@@ -1203,7 +1331,9 @@ function showApplication(user) {
 
 async function logout() {
 
-    await supabaseClient.auth.signOut();
+    await supabaseClient
+        .auth
+        .signOut();
 
     location.reload();
 
@@ -1221,10 +1351,8 @@ function showLoginMessage(message) {
             "loginMessage"
         );
 
-
     box.textContent =
         message;
-
 
     box.style.display =
         "block";
@@ -1276,7 +1404,7 @@ async function loadPermissions() {
 
 
 /* =====================================================
-   ACTUALIZAR INDICADORES
+   INDICADORES
 ===================================================== */
 
 function updateDashboard() {
@@ -1320,6 +1448,404 @@ function updateDashboard() {
 
 
 /* =====================================================
+   FESTIVOS DE COLOMBIA
+===================================================== */
+
+/*
+    Calcula la fecha de Pascua.
+*/
+
+function calcularPascua(year) {
+
+    const a = year % 19;
+
+    const b = Math.floor(year / 100);
+
+    const c = year % 100;
+
+    const d = Math.floor(b / 4);
+
+    const e = b % 4;
+
+    const f = Math.floor(
+        (b + 8) / 25
+    );
+
+    const g = Math.floor(
+        (b - f + 1) / 3
+    );
+
+    const h =
+        (
+            19 * a +
+            b -
+            d -
+            g +
+            15
+        ) % 30;
+
+    const i =
+        Math.floor(c / 4);
+
+    const k =
+        c % 4;
+
+    const l =
+        (
+            32 +
+            2 * e +
+            2 * i -
+            h -
+            k
+        ) % 7;
+
+    const m =
+        Math.floor(
+            (a + 11 * h + 22 * l) /
+            451
+        );
+
+    const month =
+        Math.floor(
+            (h + l - 7 * m + 114) /
+            31
+        );
+
+    const day =
+        (
+            (h + l - 7 * m + 114) %
+            31
+        ) + 1;
+
+
+    return new Date(
+        year,
+        month - 1,
+        day
+    );
+
+}
+
+
+/*
+    Mueve un festivo colombiano
+    al lunes siguiente cuando
+    corresponde a la Ley Emiliani.
+*/
+
+function siguienteLunes(date) {
+
+    const result =
+        new Date(date);
+
+    const day =
+        result.getDay();
+
+
+    if (day === 0) {
+
+        result.setDate(
+            result.getDate() + 1
+        );
+
+    } else if (day !== 1) {
+
+        result.setDate(
+            result.getDate() +
+            (8 - day)
+        );
+
+    }
+
+
+    return result;
+
+}
+
+
+/*
+    Festivos nacionales de Colombia.
+*/
+
+function getColombianHolidays(year) {
+
+    const holidays = {};
+
+
+    function add(date, name) {
+
+        const key =
+            formatDate(date);
+
+        holidays[key] =
+            name;
+
+    }
+
+
+    function fixed(
+        month,
+        day,
+        name
+    ) {
+
+        const date =
+            new Date(
+                year,
+                month - 1,
+                day
+            );
+
+
+        /*
+            Estos festivos se trasladan
+            al lunes según Ley Emiliani.
+        */
+
+        const monday =
+            siguienteLunes(date);
+
+
+        if (
+            date.getDay() === 1
+        ) {
+
+            add(
+                date,
+                name
+            );
+
+        } else {
+
+            add(
+                monday,
+                name
+            );
+
+        }
+
+    }
+
+
+    /*
+        Festivos fijos que NO se trasladan.
+    */
+
+    add(
+        new Date(
+            year,
+            0,
+            1
+        ),
+        "Año Nuevo"
+    );
+
+
+    add(
+        new Date(
+            year,
+            4,
+            1
+        ),
+        "Día del Trabajo"
+    );
+
+
+    add(
+        new Date(
+            year,
+            6,
+            20
+        ),
+        "Independencia de Colombia"
+    );
+
+
+    add(
+        new Date(
+            year,
+            7,
+            7
+        ),
+        "Batalla de Boyacá"
+    );
+
+
+    add(
+        new Date(
+            year,
+            11,
+            8
+        ),
+        "Inmaculada Concepción"
+    );
+
+
+    add(
+        new Date(
+            year,
+            11,
+            25
+        ),
+        "Navidad"
+    );
+
+
+    /*
+        Festivos trasladables.
+    */
+
+    fixed(
+        1,
+        6,
+        "Día de los Reyes Magos"
+    );
+
+
+    fixed(
+        3,
+        19,
+        "Día de San José"
+    );
+
+
+    fixed(
+        6,
+        29,
+        "San Pedro y San Pablo"
+    );
+
+
+    fixed(
+        8,
+        15,
+        "Asunción de la Virgen"
+    );
+
+
+    fixed(
+        10,
+        12,
+        "Día de la Raza"
+    );
+
+
+    fixed(
+        11,
+        1,
+        "Todos los Santos"
+    );
+
+
+    fixed(
+        11,
+        11,
+        "Independencia de Cartagena"
+    );
+
+
+    /*
+        Semana Santa.
+    */
+
+    const easter =
+        calcularPascua(year);
+
+
+    const juevesSanto =
+        new Date(easter);
+
+    juevesSanto.setDate(
+        easter.getDate() - 3
+    );
+
+
+    const viernesSanto =
+        new Date(easter);
+
+    viernesSanto.setDate(
+        easter.getDate() - 2
+    );
+
+
+    add(
+        juevesSanto,
+        "Jueves Santo"
+    );
+
+
+    add(
+        viernesSanto,
+        "Viernes Santo"
+    );
+
+
+    /*
+        Ascensión del Señor:
+        43 días después de Pascua,
+        trasladado al lunes.
+    */
+
+    const ascension =
+        new Date(easter);
+
+    ascension.setDate(
+        easter.getDate() + 43
+    );
+
+
+    add(
+        siguienteLunes(ascension),
+        "Ascensión del Señor"
+    );
+
+
+    /*
+        Corpus Christi:
+        64 días después de Pascua.
+    */
+
+    const corpus =
+        new Date(easter);
+
+    corpus.setDate(
+        easter.getDate() + 64
+    );
+
+
+    add(
+        siguienteLunes(corpus),
+        "Corpus Christi"
+    );
+
+
+    /*
+        Sagrado Corazón:
+        71 días después de Pascua.
+    */
+
+    const sagradoCorazon =
+        new Date(easter);
+
+    sagradoCorazon.setDate(
+        easter.getDate() + 71
+    );
+
+
+    add(
+        siguienteLunes(
+            sagradoCorazon
+        ),
+        "Sagrado Corazón de Jesús"
+    );
+
+
+    return holidays;
+
+}
+
+
+/* =====================================================
    CALENDARIO
 ===================================================== */
 
@@ -1358,8 +1884,13 @@ function renderCalendar() {
         monthName;
 
 
-    const weekdays = [
+    const holidays =
+        getColombianHolidays(
+            year
+        );
 
+
+    const weekdays = [
         "LUN",
         "MAR",
         "MIÉ",
@@ -1367,31 +1898,29 @@ function renderCalendar() {
         "VIE",
         "SÁB",
         "DOM"
-
     ];
 
 
-    weekdays.forEach(day => {
+    weekdays.forEach(
+        dayName => {
 
-        const header =
-            document.createElement(
-                "div"
+            const header =
+                document.createElement(
+                    "div"
+                );
+
+            header.className =
+                "weekday";
+
+            header.textContent =
+                dayName;
+
+            calendar.appendChild(
+                header
             );
 
-
-        header.className =
-            "weekday";
-
-
-        header.textContent =
-            day;
-
-
-        calendar.appendChild(
-            header
-        );
-
-    });
+        }
+    );
 
 
     let firstDay =
@@ -1401,6 +1930,11 @@ function renderCalendar() {
             1
         ).getDay();
 
+
+    /*
+        Convertir domingo = 0
+        a lunes = 0
+    */
 
     firstDay =
         firstDay === 0
@@ -1416,6 +1950,11 @@ function renderCalendar() {
         ).getDate();
 
 
+    /*
+        Espacios antes del
+        primer día del mes.
+    */
+
     for (
         let i = 0;
         i < firstDay;
@@ -1427,10 +1966,8 @@ function renderCalendar() {
                 "div"
             );
 
-
         empty.className =
             "day";
-
 
         calendar.appendChild(
             empty
@@ -1438,6 +1975,10 @@ function renderCalendar() {
 
     }
 
+
+    /*
+        Crear días.
+    */
 
     for (
         let dayNumber = 1;
@@ -1455,14 +1996,16 @@ function renderCalendar() {
             "day";
 
 
-        const dateString =
-            formatDate(
-                new Date(
-                    year,
-                    month,
-                    dayNumber
-                )
+        const date =
+            new Date(
+                year,
+                month,
+                dayNumber
             );
+
+
+        const dateString =
+            formatDate(date);
 
 
         const today =
@@ -1472,8 +2015,7 @@ function renderCalendar() {
 
 
         if (
-            dateString ===
-            today
+            dateString === today
         ) {
 
             day.classList.add(
@@ -1483,30 +2025,75 @@ function renderCalendar() {
         }
 
 
+        /*
+            Número del día.
+        */
+
         const number =
             document.createElement(
                 "div"
             );
 
-
         number.className =
             "day-number";
 
-
         number.textContent =
             dayNumber;
-
 
         day.appendChild(
             number
         );
 
 
+        /*
+            FESTIVO
+        */
+
+        if (
+            holidays[dateString]
+        ) {
+
+            day.classList.add(
+                "holiday-day"
+            );
+
+
+            const holiday =
+                document.createElement(
+                    "div"
+                );
+
+
+            holiday.className =
+                "holiday-name";
+
+
+            holiday.textContent =
+                "🇨🇴 " +
+                holidays[dateString];
+
+
+            holiday.title =
+                "Día festivo de Colombia";
+
+
+            day.appendChild(
+                holiday
+            );
+
+        }
+
+
+        /*
+            PERMISOS
+        */
+
         const events =
             getFilteredPermissions()
                 .filter(
-                    p =>
-                        p.fecha_ejecucion ===
+                    permission =>
+                        permission
+                            .fecha_ejecucion ===
                         dateString
                 );
 
@@ -1597,13 +2184,21 @@ function getFilteredPermissions() {
             const text = [
 
                 permission.numero_po,
+
                 permission.actividad,
+
                 permission.municipio,
+
                 permission.zona,
+
                 permission.alimentador,
+
                 permission.cto,
+
                 permission.responsable,
+
                 permission.contratista,
+
                 permission.planeador
 
             ]
@@ -1613,7 +2208,9 @@ function getFilteredPermissions() {
 
             const matchesSearch =
                 !search ||
-                text.includes(search);
+                text.includes(
+                    search
+                );
 
 
             const matchesEstado =
@@ -1639,8 +2236,7 @@ function getFilteredPermissions() {
 
 function openNewPermission() {
 
-    editingId =
-        null;
+    editingId = null;
 
 
     document
@@ -1674,6 +2270,14 @@ function openNewPermission() {
 
     document
         .getElementById(
+            "btnEliminar"
+        )
+        .style.display =
+        "none";
+
+
+    document
+        .getElementById(
             "permissionModal"
         )
         .style.display =
@@ -1702,12 +2306,10 @@ function openEditPermission(
         "Editar permiso operativo";
 
 
-    document
-        .getElementById(
-            "permissionId"
-        )
-        .value =
-        permission.id;
+    setValue(
+        "permissionId",
+        permission.id
+    );
 
 
     setValue(
@@ -1810,6 +2412,19 @@ function openEditPermission(
         "observaciones",
         permission.observaciones
     );
+
+
+    /*
+        Mostrar botón eliminar
+        solamente al editar.
+    */
+
+    document
+        .getElementById(
+            "btnEliminar"
+        )
+        .style.display =
+        "inline-block";
 
 
     document
@@ -1918,7 +2533,9 @@ async function savePermission() {
     };
 
 
-    if (!data.actividad) {
+    if (
+        !data.actividad
+    ) {
 
         showFormMessage(
             "La actividad es obligatoria.",
@@ -1932,6 +2549,10 @@ async function savePermission() {
     let result;
 
 
+    /*
+        EDITAR
+    */
+
     if (editingId) {
 
         result =
@@ -1943,7 +2564,13 @@ async function savePermission() {
                     editingId
                 );
 
-    } else {
+    }
+
+    /*
+        NUEVO
+    */
+
+    else {
 
         result =
             await supabaseClient
@@ -1955,7 +2582,9 @@ async function savePermission() {
     }
 
 
-    if (result.error) {
+    if (
+        result.error
+    ) {
 
         showFormMessage(
             "Error guardando el permiso: " +
@@ -1973,6 +2602,103 @@ async function savePermission() {
             : "Permiso creado correctamente.",
         true
     );
+
+
+    await loadPermissions();
+
+
+    setTimeout(
+        () => {
+
+            closeModal();
+
+        },
+        700
+    );
+
+}
+
+
+/* =====================================================
+   ELIMINAR PERMISO
+===================================================== */
+
+async function deletePermission() {
+
+    if (!editingId) {
+
+        return;
+
+    }
+
+
+    /*
+        Buscar permiso actual.
+    */
+
+    const permission =
+        permisos.find(
+            p =>
+                p.id ===
+                editingId
+        );
+
+
+    const numeroPO =
+        permission &&
+        permission.numero_po
+            ? permission.numero_po
+            : editingId;
+
+
+    const confirmar =
+        confirm(
+            "¿Está seguro de eliminar el permiso PO " +
+            numeroPO +
+            "?\n\n" +
+            "Esta acción no se puede deshacer."
+        );
+
+
+    if (!confirmar) {
+
+        return;
+
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from("permisos")
+            .delete()
+            .eq(
+                "id",
+                editingId
+            );
+
+
+    if (error) {
+
+        showFormMessage(
+            "No fue posible eliminar el permiso: " +
+            error.message,
+            false
+        );
+
+        return;
+
+    }
+
+
+    showFormMessage(
+        "Permiso eliminado correctamente.",
+        true
+    );
+
+
+    editingId = null;
 
 
     await loadPermissions();
@@ -2030,21 +2756,37 @@ function clearForm() {
     const fields = [
 
         "permissionId",
+
         "numero_po",
+
         "actividad",
+
         "fecha_ejecucion",
+
         "hora_inicio",
+
         "hora_fin",
+
         "municipio",
+
         "zona",
+
         "alimentador",
+
         "cto",
+
         "responsable",
+
         "contratista",
+
         "planeador",
+
         "fecha_solicitud",
+
         "fecha_aprobacion",
+
         "fecha_ejecucion_real",
+
         "observaciones"
 
     ];
@@ -2138,9 +2880,20 @@ function goToday() {
 
 function getValue(id) {
 
-    return document
-        .getElementById(id)
-        .value
+    const element =
+        document.getElementById(
+            id
+        );
+
+
+    if (!element) {
+
+        return "";
+
+    }
+
+
+    return element.value
         .trim();
 
 }
@@ -2167,7 +2920,9 @@ function setValue(
 }
 
 
-function formatDate(date) {
+function formatDate(
+    date
+) {
 
     const year =
         date.getFullYear();
@@ -2191,12 +2946,20 @@ function formatDate(date) {
         );
 
 
-    return `${year}-${month}-${day}`;
+    return (
+        year +
+        "-" +
+        month +
+        "-" +
+        day
+    );
 
 }
 
 
-function escapeHtml(value) {
+function escapeHtml(
+    value
+) {
 
     if (
         value === null ||
@@ -2281,16 +3044,20 @@ async function checkSession() {
 
 
 /* =====================================================
-   ESCUCHAR CAMBIOS DE SESIÓN
+   CAMBIOS DE SESIÓN
 ===================================================== */
 
 supabaseClient
     .auth
     .onAuthStateChange(
-        (event, session) => {
+        (
+            event,
+            session
+        ) => {
 
             if (
-                event === "SIGNED_IN" &&
+                event ===
+                "SIGNED_IN" &&
                 session &&
                 session.user
             ) {
@@ -2306,7 +3073,7 @@ supabaseClient
 
 
 /* =====================================================
-   ACTUALIZACIÓN AUTOMÁTICA
+   ACTUALIZACIÓN EN TIEMPO REAL
 ===================================================== */
 
 supabaseClient
@@ -2317,19 +3084,16 @@ supabaseClient
 
     .on(
         "postgres_changes",
-
         {
             event: "*",
             schema: "public",
             table: "permisos"
         },
-
         () => {
 
             loadPermissions();
 
         }
-
     )
 
     .subscribe();
@@ -2340,6 +3104,7 @@ supabaseClient
 ===================================================== */
 
 checkSession();
+
 
 </script>
 
