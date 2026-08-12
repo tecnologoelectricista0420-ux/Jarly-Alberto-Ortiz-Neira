@@ -2,561 +2,791 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Permisos Operativos Regional Aguachica</title>
-
-    <!-- SUPABASE -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f1f5f9;
-            color: #1e293b;
-        }
-
-        /* =========================
-           LOGIN
-        ========================= */
-
-        #loginScreen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(
-                135deg,
-                #0f172a,
-                #1e3a8a
-            );
-            padding: 20px;
-        }
-
-        .login-card {
-            width: 100%;
-            max-width: 420px;
-            background: white;
-            border-radius: 18px;
-            padding: 35px;
-            box-shadow: 0 20px 50px rgba(0,0,0,.25);
-        }
-
-        .login-logo {
-            text-align: center;
-            font-size: 52px;
-            margin-bottom: 10px;
-        }
-
-        .login-card h1 {
-            text-align: center;
-            margin: 0;
-            font-size: 24px;
-        }
-
-        .login-card p {
-            text-align: center;
-            color: #64748b;
-            margin-bottom: 30px;
-        }
-
-        /* =========================
-           APP
-        ========================= */
-
-        #app {
-            display: none;
-        }
-
-        .topbar {
-            min-height: 70px;
-            background: #0f172a;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 25px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .topbar-title {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .topbar-user {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 14px;
-        }
-
-        .btn-logout {
-            background: #334155;
-            color: white;
-            border: none;
-            padding: 9px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .btn-logout:hover {
-            background: #475569;
-        }
-
-        .container {
-            max-width: 1500px;
-            margin: auto;
-            padding: 25px;
-        }
-
-        /* =========================
-           DASHBOARD
-        ========================= */
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 18px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.06);
-            border-left: 5px solid;
-        }
-
-        .stat-card h3 {
-            margin: 0;
-            font-size: 14px;
-            color: #64748b;
-        }
-
-        .stat-number {
-            font-size: 30px;
-            font-weight: bold;
-            margin-top: 8px;
-        }
-
-        .stat-planeado {
-            border-color: #2196f3;
-        }
-
-        .stat-solicitado {
-            border-color: #eab308;
-        }
-
-        .stat-aprobado {
-            border-color: #9333ea;
-        }
-
-        .stat-ejecutado {
-            border-color: #16a34a;
-        }
-
-        /* =========================
-           TOOLBAR
-        ========================= */
-
-        .toolbar {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.06);
-        }
-
-        .toolbar input,
-        .toolbar select {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        /* =========================
-           INPUTS
-        ========================= */
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 14px;
-            background: white;
-        }
-
-        textarea {
-            min-height: 90px;
-            resize: vertical;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 6px;
-            font-size: 13px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        button {
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 11px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .btn-primary:hover {
-            background: #1d4ed8;
-        }
-
-        .btn-secondary {
-            background: #64748b;
-            color: white;
-            border: none;
-            padding: 11px 18px;
-            border-radius: 8px;
-        }
-
-        .btn-secondary:hover {
-            background: #475569;
-        }
-
-        .btn-danger {
-            background: #dc2626;
-            color: white;
-            border: none;
-            padding: 11px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        .btn-danger:hover {
-            background: #b91c1c;
-        }
-
-        /* =========================
-           CALENDARIO
-        ========================= */
-
-        .calendar-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.06);
-        }
-
-        .calendar-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .calendar-header h2 {
-            margin: 0;
-            text-transform: capitalize;
-        }
-
-        .calendar-buttons {
-            display: flex;
-            gap: 6px;
-        }
-
-        .calendar-buttons button {
-            border: none;
-            background: #e2e8f0;
-            padding: 8px 12px;
-            border-radius: 7px;
-            font-weight: bold;
-        }
-
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            border-top: 1px solid #e2e8f0;
-            border-left: 1px solid #e2e8f0;
-        }
-
-        .weekday {
-            background: #f8fafc;
-            font-weight: bold;
-            text-align: center;
-            padding: 10px 5px;
-            border-right: 1px solid #e2e8f0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .day {
-            min-height: 125px;
-            padding: 6px;
-            border-right: 1px solid #e2e8f0;
-            border-bottom: 1px solid #e2e8f0;
-            background: white;
-        }
-
-        .day-number {
-            font-weight: bold;
-            font-size: 13px;
-            margin-bottom: 5px;
-        }
-
-        .today {
-            background: #eff6ff;
-        }
-
-        /* =========================
-           FESTIVOS COLOMBIA
-        ========================= */
-
-        .holiday-day {
-            background: #fff7ed !important;
-        }
-
-        .holiday-name {
-            background: #f97316;
-            color: white;
-            padding: 4px 6px;
-            border-radius: 5px;
-            font-size: 10px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        /* =========================
-           EVENTOS / PERMISOS
-        ========================= */
-
-        .event {
-            color: white;
-            padding: 5px 7px;
-            border-radius: 5px;
-            font-size: 11px;
-            margin-bottom: 4px;
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        .event:hover {
-            opacity: .85;
-        }
-
-        .estado-PLANEADO {
-            background: #2196f3;
-        }
-
-        .estado-SOLICITADO {
-            background: #eab308;
-            color: #111827;
-        }
-
-        .estado-APROBADO {
-            background: #9333ea;
-        }
-
-        .estado-EJECUTADO {
-            background: #16a34a;
-        }
-
-        /* =========================
-           MODAL
-        ========================= */
-
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(15,23,42,.65);
-            z-index: 1000;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            max-width: 850px;
-            margin: 30px auto;
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h2 {
-            margin: 0;
-        }
-
-        .close {
-            border: none;
-            background: #e2e8f0;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            font-size: 20px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        .full {
-            grid-column: 1 / -1;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .modal-actions-right {
-            display: flex;
-            gap: 10px;
-        }
-
-        /* =========================
-           MENSAJES
-        ========================= */
-
-        .message {
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 10px;
-            display: none;
-        }
-
-        .message-error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .message-success {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        /* =========================
-           LEYENDA
-        ========================= */
-
-        .legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 15px;
-            font-size: 12px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .legend-color {
-            width: 14px;
-            height: 14px;
-            border-radius: 4px;
-        }
-
-        .legend-holiday {
-            background: #f97316;
-        }
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media(max-width: 900px) {
-
-            .dashboard {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .day {
-                min-height: 100px;
-            }
-        }
-
-        @media(max-width: 650px) {
-
-            .topbar {
-                height: auto;
-                padding: 15px;
-                flex-direction: column;
-                gap: 10px;
-                align-items: flex-start;
-            }
-
-            .container {
-                padding: 10px;
-            }
-
-            .dashboard {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .calendar {
-                min-width: 750px;
-            }
-
-            .calendar-wrapper {
-                overflow-x: auto;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .full {
-                grid-column: auto;
-            }
-
-            .modal-actions {
-                flex-direction: column;
-            }
-
-            .modal-actions-right {
-                flex-direction: column;
-            }
-        }
-
-    </style>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Permisos Operativos Regional Aguachica</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+#loginScreen {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        #0f172a,
+        #1e3a8a
+    );
+
+    padding: 20px;
+}
+
+.login-card {
+
+    width: 100%;
+
+    max-width: 420px;
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 35px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.25);
+}
+
+.login-logo {
+
+    text-align: center;
+
+    font-size: 52px;
+
+    margin-bottom: 10px;
+}
+
+.login-card h1 {
+
+    text-align: center;
+
+    margin: 0;
+
+    font-size: 24px;
+}
+
+.login-card p {
+
+    text-align: center;
+
+    color: #64748b;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================
+   APLICACIÓN
+========================= */
+
+#app {
+    display: none;
+}
+
+.topbar {
+
+    min-height: 70px;
+
+    background: #0f172a;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 12px 25px;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 100;
+}
+
+.topbar-title {
+
+    font-size: 20px;
+
+    font-weight: bold;
+}
+
+.topbar-user {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    font-size: 14px;
+}
+
+.btn-logout {
+
+    background: #334155;
+
+    color: white;
+
+    border: none;
+
+    padding: 9px 15px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.btn-logout:hover {
+    background: #475569;
+}
+
+.container {
+
+    max-width: 1500px;
+
+    margin: auto;
+
+    padding: 25px;
+}
+
+
+/* =========================
+   INDICADORES
+========================= */
+
+.dashboard {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+.stat-card {
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 18px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.06);
+
+    border-left: 5px solid;
+}
+
+.stat-card h3 {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    color: #64748b;
+}
+
+.stat-number {
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+    margin-top: 8px;
+}
+
+.stat-planeado {
+    border-color: #2196f3;
+}
+
+.stat-solicitado {
+    border-color: #eab308;
+}
+
+.stat-aprobado {
+    border-color: #9333ea;
+}
+
+.stat-ejecutado {
+    border-color: #16a34a;
+}
+
+
+/* =========================
+   BARRA DE HERRAMIENTAS
+========================= */
+
+.toolbar {
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 15px;
+
+    display: flex;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.06);
+}
+
+.toolbar input,
+.toolbar select {
+
+    flex: 1;
+
+    min-width: 200px;
+}
+
+
+/* =========================
+   CAMPOS
+========================= */
+
+input,
+select,
+textarea {
+
+    width: 100%;
+
+    padding: 11px;
+
+    border:
+        1px solid #cbd5e1;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    background: white;
+}
+
+textarea {
+
+    min-height: 90px;
+
+    resize: vertical;
+}
+
+label {
+
+    display: block;
+
+    font-weight: bold;
+
+    margin-bottom: 6px;
+
+    font-size: 13px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.btn-primary {
+
+    background: #2563eb;
+
+    color: white;
+
+    border: none;
+
+    padding: 11px 18px;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.btn-secondary {
+
+    background: #64748b;
+
+    color: white;
+
+    border: none;
+
+    padding: 11px 18px;
+
+    border-radius: 8px;
+}
+
+.btn-danger {
+
+    background: #dc2626;
+
+    color: white;
+
+    border: none;
+
+    padding: 11px 18px;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+
+/* =========================
+   CALENDARIO
+========================= */
+
+.calendar-card {
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 15px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.06);
+}
+
+.calendar-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+}
+
+.calendar-header h2 {
+
+    margin: 0;
+
+    text-transform: capitalize;
+}
+
+.calendar-buttons {
+
+    display: flex;
+
+    gap: 6px;
+}
+
+.calendar-buttons button {
+
+    border: none;
+
+    background: #e2e8f0;
+
+    padding: 8px 12px;
+
+    border-radius: 7px;
+
+    font-weight: bold;
+}
+
+.calendar-wrapper {
+    overflow-x: auto;
+}
+
+.calendar {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(120px, 1fr));
+
+    border-top:
+        1px solid #e2e8f0;
+
+    border-left:
+        1px solid #e2e8f0;
+
+    min-width: 840px;
+}
+
+.weekday {
+
+    background: #f8fafc;
+
+    font-weight: bold;
+
+    text-align: center;
+
+    padding: 10px 5px;
+
+    border-right:
+        1px solid #e2e8f0;
+
+    border-bottom:
+        1px solid #e2e8f0;
+}
+
+.day {
+
+    min-height: 125px;
+
+    padding: 6px;
+
+    border-right:
+        1px solid #e2e8f0;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    background: white;
+}
+
+.day-number {
+
+    font-weight: bold;
+
+    font-size: 13px;
+
+    margin-bottom: 5px;
+}
+
+.today {
+    background: #eff6ff;
+}
+
+
+/* =========================
+   FESTIVOS
+========================= */
+
+.holiday-day {
+
+    background: #fff7ed !important;
+}
+
+.holiday-name {
+
+    background: #f97316;
+
+    color: white;
+
+    padding: 4px 6px;
+
+    border-radius: 5px;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    margin-bottom: 5px;
+}
+
+
+/* =========================
+   PERMISOS
+========================= */
+
+.event {
+
+    color: white;
+
+    padding: 5px 7px;
+
+    border-radius: 5px;
+
+    font-size: 11px;
+
+    margin-bottom: 4px;
+
+    cursor: pointer;
+
+    overflow: hidden;
+}
+
+.event:hover {
+    opacity: .85;
+}
+
+.estado-PLANEADO {
+    background: #2196f3;
+}
+
+.estado-SOLICITADO {
+
+    background: #eab308;
+
+    color: #111827;
+}
+
+.estado-APROBADO {
+    background: #9333ea;
+}
+
+.estado-EJECUTADO {
+    background: #16a34a;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(15,23,42,.65);
+
+    z-index: 1000;
+
+    padding: 20px;
+
+    overflow-y: auto;
+}
+
+.modal-content {
+
+    max-width: 850px;
+
+    margin: 30px auto;
+
+    background: white;
+
+    border-radius: 15px;
+
+    padding: 25px;
+}
+
+.modal-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    margin: 0;
+}
+
+.close {
+
+    border: none;
+
+    background: #e2e8f0;
+
+    width: 35px;
+
+    height: 35px;
+
+    border-radius: 50%;
+
+    font-size: 20px;
+}
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 15px;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+.modal-actions {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.modal-actions-right {
+
+    display: flex;
+
+    gap: 10px;
+}
+
+
+/* =========================
+   MENSAJES
+========================= */
+
+.message {
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    margin-top: 10px;
+
+    display: none;
+}
+
+.message-error {
+
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+.message-success {
+
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+/* =========================
+   LEYENDA
+========================= */
+
+.legend {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-top: 15px;
+
+    font-size: 12px;
+}
+
+.legend-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+.legend-color {
+
+    width: 14px;
+
+    height: 14px;
+
+    border-radius: 4px;
+}
+
+.legend-holiday {
+    background: #f97316;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width: 900px) {
+
+    .dashboard {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+@media(max-width: 650px) {
+
+    .topbar {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .dashboard {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+
+    .modal-actions {
+
+        flex-direction: column;
+    }
+
+    .modal-actions-right {
+
+        flex-direction: column;
+    }
+
+}
+
+</style>
 
 </head>
+
 
 <body>
 
@@ -581,6 +811,7 @@
             Regional Aguachica
         </p>
 
+
         <div class="form-group">
 
             <label>
@@ -594,6 +825,7 @@
             >
 
         </div>
+
 
         <div class="form-group">
 
@@ -609,6 +841,7 @@
 
         </div>
 
+
         <button
             class="btn-primary"
             style="width:100%"
@@ -616,6 +849,7 @@
         >
             🔐 Ingresar
         </button>
+
 
         <div
             id="loginMessage"
@@ -633,11 +867,13 @@
 
 <div id="app">
 
+
     <div class="topbar">
 
         <div class="topbar-title">
             ⚡ PLANIFICADOR DE PERMISOS OPERATIVOS
         </div>
+
 
         <div class="topbar-user">
 
@@ -658,11 +894,10 @@
     <div class="container">
 
 
-        <!-- =========================
-             INDICADORES
-        ========================= -->
+        <!-- INDICADORES -->
 
         <div class="dashboard">
+
 
             <div class="stat-card stat-planeado">
 
@@ -730,11 +965,10 @@
         </div>
 
 
-        <!-- =========================
-             FILTROS
-        ========================= -->
+        <!-- FILTROS -->
 
         <div class="toolbar">
+
 
             <input
                 type="text"
@@ -742,6 +976,7 @@
                 placeholder="🔎 Buscar PO, actividad, municipio, alimentador..."
                 oninput="renderCalendar()"
             >
+
 
             <select
                 id="filterEstado"
@@ -781,15 +1016,15 @@
         </div>
 
 
-        <!-- =========================
-             CALENDARIO
-        ========================= -->
+        <!-- CALENDARIO -->
 
         <div class="calendar-card">
+
 
             <div class="calendar-header">
 
                 <h2 id="monthTitle"></h2>
+
 
                 <div class="calendar-buttons">
 
@@ -820,48 +1055,67 @@
             </div>
 
 
-            <!-- LEYENDA -->
-
             <div class="legend">
 
+
                 <div class="legend-item">
+
                     <span
                         class="legend-color"
                         style="background:#2196f3"
                     ></span>
+
                     Planeado
+
                 </div>
 
+
                 <div class="legend-item">
+
                     <span
                         class="legend-color"
                         style="background:#eab308"
                     ></span>
+
                     Solicitado
+
                 </div>
 
+
                 <div class="legend-item">
+
                     <span
                         class="legend-color"
                         style="background:#9333ea"
                     ></span>
+
                     Aprobado
+
                 </div>
 
+
                 <div class="legend-item">
+
                     <span
                         class="legend-color"
                         style="background:#16a34a"
                     ></span>
+
                     Ejecutado
+
                 </div>
 
+
                 <div class="legend-item">
+
                     <span
                         class="legend-color legend-holiday"
                     ></span>
+
                     Festivo Colombia
+
                 </div>
+
 
             </div>
 
@@ -873,13 +1127,14 @@
 
 
 <!-- =====================================================
-     MODAL PERMISO
+     MODAL
 ===================================================== -->
 
 <div
     id="permissionModal"
     class="modal"
 >
+
 
     <div class="modal-content">
 
@@ -889,6 +1144,7 @@
             <h2 id="modalTitle">
                 Nuevo permiso operativo
             </h2>
+
 
             <button
                 class="close"
@@ -1154,6 +1410,7 @@
 
         <div class="modal-actions">
 
+
             <div>
 
                 <button
@@ -1177,6 +1434,7 @@
                     Cancelar
                 </button>
 
+
                 <button
                     class="btn-primary"
                     onclick="savePermission()"
@@ -1188,7 +1446,6 @@
 
         </div>
 
-
     </div>
 
 </div>
@@ -1198,7 +1455,7 @@
 
 
 /* =====================================================
-   CONFIGURACIÓN SUPABASE
+   SUPABASE
 ===================================================== */
 
 const SUPABASE_URL =
@@ -1258,16 +1515,15 @@ async function login() {
         const {
             data,
             error
-        } =
-            await supabaseClient
-                .auth
-                .signInWithPassword({
+        } = await supabaseClient
+            .auth
+            .signInWithPassword({
 
-                    email: email,
+                email: email,
 
-                    password: password
+                password: password
 
-                });
+            });
 
 
         if (error) {
@@ -1299,7 +1555,7 @@ async function login() {
 
 
 /* =====================================================
-   MOSTRAR APLICACIÓN
+   MOSTRAR APP
 ===================================================== */
 
 function showApplication(user) {
@@ -1326,7 +1582,7 @@ function showApplication(user) {
 
 
 /* =====================================================
-   CERRAR SESIÓN
+   LOGOUT
 ===================================================== */
 
 async function logout() {
@@ -1366,11 +1622,12 @@ function showLoginMessage(message) {
 
 async function loadPermissions() {
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
             .from("permisos")
             .select("*")
             .order(
@@ -1381,24 +1638,44 @@ async function loadPermissions() {
             );
 
 
-    if (error) {
+        if (error) {
 
-        alert(
-            "Error cargando permisos:\n\n" +
-            error.message
+            console.error(
+                "Error cargando permisos:",
+                error
+            );
+
+            alert(
+                "Error cargando permisos:\n\n" +
+                error.message
+            );
+
+            return;
+        }
+
+
+        permisos = data || [];
+
+
+        updateDashboard();
+
+        renderCalendar();
+
+
+        console.log(
+            "Permisos cargados:",
+            permisos.length
         );
 
-        return;
+
+    } catch (error) {
+
+        console.error(
+            "Error inesperado cargando permisos:",
+            error
+        );
+
     }
-
-
-    permisos =
-        data || [];
-
-
-    updateDashboard();
-
-    renderCalendar();
 
 }
 
@@ -1448,22 +1725,22 @@ function updateDashboard() {
 
 
 /* =====================================================
-   FESTIVOS DE COLOMBIA
+   PASCUA
 ===================================================== */
-
-/*
-    Calcula la fecha de Pascua.
-*/
 
 function calcularPascua(year) {
 
     const a = year % 19;
 
-    const b = Math.floor(year / 100);
+    const b = Math.floor(
+        year / 100
+    );
 
     const c = year % 100;
 
-    const d = Math.floor(b / 4);
+    const d = Math.floor(
+        b / 4
+    );
 
     const e = b % 4;
 
@@ -1485,10 +1762,11 @@ function calcularPascua(year) {
         ) % 30;
 
     const i =
-        Math.floor(c / 4);
+        Math.floor(
+            c / 4
+        );
 
-    const k =
-        c % 4;
+    const k = c % 4;
 
     const l =
         (
@@ -1501,20 +1779,31 @@ function calcularPascua(year) {
 
     const m =
         Math.floor(
-            (a + 11 * h + 22 * l) /
-            451
+            (
+                a +
+                11 * h +
+                22 * l
+            ) / 451
         );
 
     const month =
         Math.floor(
-            (h + l - 7 * m + 114) /
-            31
+            (
+                h +
+                l -
+                7 * m +
+                114
+            ) / 31
         );
 
     const day =
         (
-            (h + l - 7 * m + 114) %
-            31
+            (
+                h +
+                l -
+                7 * m +
+                114
+            ) % 31
         ) + 1;
 
 
@@ -1527,11 +1816,9 @@ function calcularPascua(year) {
 }
 
 
-/*
-    Mueve un festivo colombiano
-    al lunes siguiente cuando
-    corresponde a la Ley Emiliani.
-*/
+/* =====================================================
+   SIGUIENTE LUNES
+===================================================== */
 
 function siguienteLunes(date) {
 
@@ -1548,7 +1835,8 @@ function siguienteLunes(date) {
             result.getDate() + 1
         );
 
-    } else if (day !== 1) {
+    }
+    else if (day !== 1) {
 
         result.setDate(
             result.getDate() +
@@ -1563,9 +1851,9 @@ function siguienteLunes(date) {
 }
 
 
-/*
-    Festivos nacionales de Colombia.
-*/
+/* =====================================================
+   FESTIVOS COLOMBIA
+===================================================== */
 
 function getColombianHolidays(year) {
 
@@ -1574,11 +1862,9 @@ function getColombianHolidays(year) {
 
     function add(date, name) {
 
-        const key =
-            formatDate(date);
-
-        holidays[key] =
-            name;
+        holidays[
+            formatDate(date)
+        ] = name;
 
     }
 
@@ -1597,15 +1883,6 @@ function getColombianHolidays(year) {
             );
 
 
-        /*
-            Estos festivos se trasladan
-            al lunes según Ley Emiliani.
-        */
-
-        const monday =
-            siguienteLunes(date);
-
-
         if (
             date.getDay() === 1
         ) {
@@ -1615,10 +1892,11 @@ function getColombianHolidays(year) {
                 name
             );
 
-        } else {
+        }
+        else {
 
             add(
-                monday,
+                siguienteLunes(date),
                 name
             );
 
@@ -1627,73 +1905,45 @@ function getColombianHolidays(year) {
     }
 
 
-    /*
-        Festivos fijos que NO se trasladan.
-    */
+    /* Festivos fijos */
 
     add(
-        new Date(
-            year,
-            0,
-            1
-        ),
+        new Date(year, 0, 1),
         "Año Nuevo"
     );
 
 
     add(
-        new Date(
-            year,
-            4,
-            1
-        ),
+        new Date(year, 4, 1),
         "Día del Trabajo"
     );
 
 
     add(
-        new Date(
-            year,
-            6,
-            20
-        ),
+        new Date(year, 6, 20),
         "Independencia de Colombia"
     );
 
 
     add(
-        new Date(
-            year,
-            7,
-            7
-        ),
+        new Date(year, 7, 7),
         "Batalla de Boyacá"
     );
 
 
     add(
-        new Date(
-            year,
-            11,
-            8
-        ),
+        new Date(year, 11, 8),
         "Inmaculada Concepción"
     );
 
 
     add(
-        new Date(
-            year,
-            11,
-            25
-        ),
+        new Date(year, 11, 25),
         "Navidad"
     );
 
 
-    /*
-        Festivos trasladables.
-    */
+    /* Festivos Ley Emiliani */
 
     fixed(
         1,
@@ -1744,9 +1994,7 @@ function getColombianHolidays(year) {
     );
 
 
-    /*
-        Semana Santa.
-    */
+    /* Semana Santa */
 
     const easter =
         calcularPascua(year);
@@ -1780,11 +2028,7 @@ function getColombianHolidays(year) {
     );
 
 
-    /*
-        Ascensión del Señor:
-        43 días después de Pascua,
-        trasladado al lunes.
-    */
+    /* Ascensión */
 
     const ascension =
         new Date(easter);
@@ -1800,10 +2044,7 @@ function getColombianHolidays(year) {
     );
 
 
-    /*
-        Corpus Christi:
-        64 días después de Pascua.
-    */
+    /* Corpus Christi */
 
     const corpus =
         new Date(easter);
@@ -1819,10 +2060,7 @@ function getColombianHolidays(year) {
     );
 
 
-    /*
-        Sagrado Corazón:
-        71 días después de Pascua.
-    */
+    /* Sagrado Corazón */
 
     const sagradoCorazon =
         new Date(easter);
@@ -1868,7 +2106,11 @@ function renderCalendar() {
         currentDate.getMonth();
 
 
-    const monthName =
+    document
+        .getElementById(
+            "monthTitle"
+        )
+        .textContent =
         currentDate.toLocaleDateString(
             "es-CO",
             {
@@ -1878,12 +2120,6 @@ function renderCalendar() {
         );
 
 
-    document
-        .getElementById("monthTitle")
-        .textContent =
-        monthName;
-
-
     const holidays =
         getColombianHolidays(
             year
@@ -1891,6 +2127,7 @@ function renderCalendar() {
 
 
     const weekdays = [
+
         "LUN",
         "MAR",
         "MIÉ",
@@ -1898,11 +2135,12 @@ function renderCalendar() {
         "VIE",
         "SÁB",
         "DOM"
+
     ];
 
 
     weekdays.forEach(
-        dayName => {
+        name => {
 
             const header =
                 document.createElement(
@@ -1913,7 +2151,7 @@ function renderCalendar() {
                 "weekday";
 
             header.textContent =
-                dayName;
+                name;
 
             calendar.appendChild(
                 header
@@ -1931,11 +2169,6 @@ function renderCalendar() {
         ).getDay();
 
 
-    /*
-        Convertir domingo = 0
-        a lunes = 0
-    */
-
     firstDay =
         firstDay === 0
             ? 6
@@ -1950,10 +2183,7 @@ function renderCalendar() {
         ).getDate();
 
 
-    /*
-        Espacios antes del
-        primer día del mes.
-    */
+    /* Espacios */
 
     for (
         let i = 0;
@@ -1976,15 +2206,14 @@ function renderCalendar() {
     }
 
 
-    /*
-        Crear días.
-    */
+    /* Días */
 
     for (
         let dayNumber = 1;
         dayNumber <= daysInMonth;
         dayNumber++
     ) {
+
 
         const day =
             document.createElement(
@@ -2025,9 +2254,7 @@ function renderCalendar() {
         }
 
 
-        /*
-            Número del día.
-        */
+        /* Número */
 
         const number =
             document.createElement(
@@ -2045,9 +2272,7 @@ function renderCalendar() {
         );
 
 
-        /*
-            FESTIVO
-        */
+        /* Festivo */
 
         if (
             holidays[dateString]
@@ -2073,10 +2298,6 @@ function renderCalendar() {
                 holidays[dateString];
 
 
-            holiday.title =
-                "Día festivo de Colombia";
-
-
             day.appendChild(
                 holiday
             );
@@ -2084,9 +2305,7 @@ function renderCalendar() {
         }
 
 
-        /*
-            PERMISOS
-        */
+        /* Permisos */
 
         const events =
             getFilteredPermissions()
@@ -2113,18 +2332,16 @@ function renderCalendar() {
 
 
                 event.innerHTML =
+
                     "<strong>PO " +
                     escapeHtml(
                         permission.numero_po || ""
                     ) +
                     "</strong><br>" +
+
                     escapeHtml(
                         permission.actividad || ""
                     );
-
-
-                event.title =
-                    "Haz clic para editar";
 
 
                 event.onclick =
@@ -2181,6 +2398,7 @@ function getFilteredPermissions() {
     return permisos.filter(
         permission => {
 
+
             const text = [
 
                 permission.numero_po,
@@ -2206,22 +2424,16 @@ function getFilteredPermissions() {
             .toLowerCase();
 
 
-            const matchesSearch =
-                !search ||
-                text.includes(
-                    search
-                );
-
-
-            const matchesEstado =
-                !estado ||
-                permission.estado ===
-                estado;
-
-
             return (
-                matchesSearch &&
-                matchesEstado
+
+                (!search ||
+                text.includes(search))
+
+                &&
+
+                (!estado ||
+                permission.estado === estado)
+
             );
 
         }
@@ -2231,7 +2443,7 @@ function getFilteredPermissions() {
 
 
 /* =====================================================
-   NUEVO PERMISO
+   NUEVO
 ===================================================== */
 
 function openNewPermission() {
@@ -2287,7 +2499,7 @@ function openNewPermission() {
 
 
 /* =====================================================
-   EDITAR PERMISO
+   EDITAR
 ===================================================== */
 
 function openEditPermission(
@@ -2414,11 +2626,6 @@ function openEditPermission(
     );
 
 
-    /*
-        Mostrar botón eliminar
-        solamente al editar.
-    */
-
     document
         .getElementById(
             "btnEliminar"
@@ -2438,7 +2645,7 @@ function openEditPermission(
 
 
 /* =====================================================
-   GUARDAR PERMISO
+   GUARDAR
 ===================================================== */
 
 async function savePermission() {
@@ -2446,96 +2653,66 @@ async function savePermission() {
     const data = {
 
         numero_po:
-            getValue(
-                "numero_po"
-            ),
+            getValue("numero_po"),
 
         actividad:
-            getValue(
-                "actividad"
-            ),
+            getValue("actividad"),
 
         fecha_ejecucion:
-            getValue(
-                "fecha_ejecucion"
-            ) || null,
+            getValue("fecha_ejecucion")
+            || null,
 
         hora_inicio:
-            getValue(
-                "hora_inicio"
-            ) || null,
+            getValue("hora_inicio")
+            || null,
 
         hora_fin:
-            getValue(
-                "hora_fin"
-            ) || null,
+            getValue("hora_fin")
+            || null,
 
         municipio:
-            getValue(
-                "municipio"
-            ),
+            getValue("municipio"),
 
         zona:
-            getValue(
-                "zona"
-            ),
+            getValue("zona"),
 
         alimentador:
-            getValue(
-                "alimentador"
-            ),
+            getValue("alimentador"),
 
         cto:
-            getValue(
-                "cto"
-            ),
+            getValue("cto"),
 
         responsable:
-            getValue(
-                "responsable"
-            ),
+            getValue("responsable"),
 
         contratista:
-            getValue(
-                "contratista"
-            ),
+            getValue("contratista"),
 
         planeador:
-            getValue(
-                "planeador"
-            ),
+            getValue("planeador"),
 
         estado:
-            getValue(
-                "estado"
-            ),
+            getValue("estado"),
 
         fecha_solicitud:
-            getValue(
-                "fecha_solicitud"
-            ) || null,
+            getValue("fecha_solicitud")
+            || null,
 
         fecha_aprobacion:
-            getValue(
-                "fecha_aprobacion"
-            ) || null,
+            getValue("fecha_aprobacion")
+            || null,
 
         fecha_ejecucion_real:
-            getValue(
-                "fecha_ejecucion_real"
-            ) || null,
+            getValue("fecha_ejecucion_real")
+            || null,
 
         observaciones:
-            getValue(
-                "observaciones"
-            )
+            getValue("observaciones")
 
     };
 
 
-    if (
-        !data.actividad
-    ) {
+    if (!data.actividad) {
 
         showFormMessage(
             "La actividad es obligatoria.",
@@ -2549,10 +2726,6 @@ async function savePermission() {
     let result;
 
 
-    /*
-        EDITAR
-    */
-
     if (editingId) {
 
         result =
@@ -2565,11 +2738,6 @@ async function savePermission() {
                 );
 
     }
-
-    /*
-        NUEVO
-    */
-
     else {
 
         result =
@@ -2582,9 +2750,7 @@ async function savePermission() {
     }
 
 
-    if (
-        result.error
-    ) {
+    if (result.error) {
 
         showFormMessage(
             "Error guardando el permiso: " +
@@ -2596,24 +2762,16 @@ async function savePermission() {
     }
 
 
-    showFormMessage(
-        editingId
-            ? "Permiso actualizado correctamente."
-            : "Permiso creado correctamente.",
-        true
-    );
-
-
     await loadPermissions();
 
 
-    setTimeout(
-        () => {
+    closeModal();
 
-            closeModal();
 
-        },
-        700
+    alert(
+        editingId
+            ? "Permiso actualizado correctamente."
+            : "Permiso creado correctamente."
     );
 
 }
@@ -2621,9 +2779,11 @@ async function savePermission() {
 
 /* =====================================================
    ELIMINAR PERMISO
+   FUNCIÓN CORREGIDA
 ===================================================== */
 
 async function deletePermission() {
+
 
     if (!editingId) {
 
@@ -2633,30 +2793,60 @@ async function deletePermission() {
 
 
     /*
-        Buscar permiso actual.
+       Buscar el permiso en memoria.
     */
 
     const permission =
         permisos.find(
             p =>
-                p.id ===
-                editingId
+                String(p.id) ===
+                String(editingId)
         );
 
 
-    const numeroPO =
-        permission &&
-        permission.numero_po
-            ? permission.numero_po
-            : editingId;
+    if (!permission) {
 
+        alert(
+            "No se encontró el permiso seleccionado."
+        );
+
+        return;
+
+    }
+
+
+    const numeroPO =
+        permission.numero_po ||
+        editingId;
+
+
+    /*
+       Confirmación.
+    */
 
     const confirmar =
         confirm(
+
             "¿Está seguro de eliminar el permiso PO " +
             numeroPO +
             "?\n\n" +
+
+            "Actividad: " +
+            (
+                permission.actividad ||
+                "Sin descripción"
+            ) +
+            "\n\n" +
+
+            "Fecha: " +
+            (
+                permission.fecha_ejecucion ||
+                "Sin fecha"
+            ) +
+            "\n\n" +
+
             "Esta acción no se puede deshacer."
+
         );
 
 
@@ -2667,51 +2857,194 @@ async function deletePermission() {
     }
 
 
-    const {
-        error
-    } =
-        await supabaseClient
-            .from("permisos")
-            .delete()
-            .eq(
-                "id",
-                editingId
+    try {
+
+
+        /*
+           ELIMINAR DE SUPABASE
+
+           IMPORTANTE:
+           .select() permite verificar
+           que realmente se eliminó
+           una fila.
+        */
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("permisos")
+                .delete()
+                .eq(
+                    "id",
+                    editingId
+                )
+                .select();
+
+
+        /*
+           Error de Supabase.
+        */
+
+        if (error) {
+
+            console.error(
+                "ERROR DELETE:",
+                error
             );
 
 
-    if (error) {
+            showFormMessage(
 
-        showFormMessage(
-            "No fue posible eliminar el permiso: " +
-            error.message,
-            false
+                "No fue posible eliminar el permiso.\n\n" +
+
+                error.message,
+
+                false
+
+            );
+
+
+            return;
+
+        }
+
+
+        /*
+           Si data está vacío,
+           ninguna fila fue eliminada.
+        */
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+
+            console.error(
+                "DELETE NO AFECTÓ FILAS",
+                {
+                    id:
+                        editingId,
+
+                    data:
+                        data
+                }
+            );
+
+
+            showFormMessage(
+
+                "El permiso NO fue eliminado de la base de datos.\n\n" +
+
+                "Supabase no devolvió ninguna fila eliminada.\n\n" +
+
+                "Esto normalmente indica que la política RLS de DELETE no permite eliminar este registro.",
+
+                false
+
+            );
+
+
+            return;
+
+        }
+
+
+        /*
+           AQUÍ SABEMOS QUE SÍ SE ELIMINÓ.
+        */
+
+        console.log(
+            "PERMISO ELIMINADO:",
+            data
         );
 
-        return;
+
+        /*
+           Eliminar inmediatamente
+           de la memoria local.
+        */
+
+        permisos =
+            permisos.filter(
+
+                p =>
+                    String(p.id) !==
+                    String(editingId)
+
+            );
+
+
+        /*
+           Actualizar indicadores.
+        */
+
+        updateDashboard();
+
+
+        /*
+           Actualizar calendario.
+        */
+
+        renderCalendar();
+
+
+        /*
+           Limpiar ID.
+        */
+
+        editingId = null;
+
+
+        /*
+           Cerrar ventana.
+        */
+
+        closeModal();
+
+
+        /*
+           Confirmación.
+        */
+
+        alert(
+
+            "✅ El permiso PO " +
+            numeroPO +
+            " fue eliminado correctamente."
+
+        );
+
+
+        /*
+           Volver a consultar Supabase.
+        */
+
+        await loadPermissions();
+
 
     }
+    catch (error) {
 
 
-    showFormMessage(
-        "Permiso eliminado correctamente.",
-        true
-    );
+        console.error(
+            "ERROR INESPERADO:",
+            error
+        );
 
 
-    editingId = null;
+        showFormMessage(
 
+            "Ocurrió un error inesperado:\n\n" +
+            error.message,
 
-    await loadPermissions();
+            false
 
+        );
 
-    setTimeout(
-        () => {
-
-            closeModal();
-
-        },
-        700
-    );
+    }
 
 }
 
@@ -2748,10 +3081,11 @@ function showFormMessage(
 
 
 /* =====================================================
-   LIMPIAR FORMULARIO
+   LIMPIAR
 ===================================================== */
 
 function clearForm() {
+
 
     const fields = [
 
@@ -2839,7 +3173,7 @@ function closeModal() {
 
 
 /* =====================================================
-   NAVEGACIÓN CALENDARIO
+   CAMBIO DE MES
 ===================================================== */
 
 function previousMonth() {
@@ -2875,7 +3209,7 @@ function goToday() {
 
 
 /* =====================================================
-   FUNCIONES AUXILIARES
+   AUXILIARES
 ===================================================== */
 
 function getValue(id) {
@@ -2893,8 +3227,7 @@ function getValue(id) {
     }
 
 
-    return element.value
-        .trim();
+    return element.value.trim();
 
 }
 
@@ -2920,9 +3253,7 @@ function setValue(
 }
 
 
-function formatDate(
-    date
-) {
+function formatDate(date) {
 
     const year =
         date.getFullYear();
@@ -2947,19 +3278,19 @@ function formatDate(
 
 
     return (
+
         year +
         "-" +
         month +
         "-" +
         day
+
     );
 
 }
 
 
-function escapeHtml(
-    value
-) {
+function escapeHtml(value) {
 
     if (
         value === null ||
@@ -3020,7 +3351,7 @@ async function checkSession() {
 
         console.error(
             "Error comprobando sesión:",
-            error.message
+            error
         );
 
         return;
@@ -3044,22 +3375,32 @@ async function checkSession() {
 
 
 /* =====================================================
-   CAMBIOS DE SESIÓN
+   CAMBIOS DE AUTENTICACIÓN
 ===================================================== */
 
 supabaseClient
     .auth
     .onAuthStateChange(
+
         (
             event,
             session
         ) => {
 
+
             if (
+
                 event ===
-                "SIGNED_IN" &&
-                session &&
+                "SIGNED_IN"
+
+                &&
+
+                session
+
+                &&
+
                 session.user
+
             ) {
 
                 showApplication(
@@ -3069,11 +3410,12 @@ supabaseClient
             }
 
         }
+
     );
 
 
 /* =====================================================
-   ACTUALIZACIÓN EN TIEMPO REAL
+   TIEMPO REAL
 ===================================================== */
 
 supabaseClient
@@ -3083,17 +3425,25 @@ supabaseClient
     )
 
     .on(
+
         "postgres_changes",
+
         {
+
             event: "*",
+
             schema: "public",
+
             table: "permisos"
+
         },
+
         () => {
 
             loadPermissions();
 
         }
+
     )
 
     .subscribe();
