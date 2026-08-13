@@ -1,1479 +1,954 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Seguimiento Permisos Operativos Regional Aguachica</title>
-
+<title>Permisos Operativos Regional Aguachica</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+*{box-sizing:border-box}
 
-* {
-    box-sizing: border-box;
+body{
+margin:0;
+font-family:Ebrima,Arial,sans-serif;
+background:#f1f5f9;
+color:#1e293b
 }
 
-body {
-    margin: 0;
-    font-family: Ebrima, Helvetica, sans-serif;
-    background: #f1f5f9;
-    color: #1e293b;
+#loginScreen{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#0f172a,#1e3a8a);
+padding:20px
 }
 
-/* =========================
-   LOGIN
-========================= */
-
-#loginScreen {
-
-    min-height: 100vh;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: linear-gradient(
-        135deg,
-        #0f172a,
-        #1e3a8a
-    );
-
-    padding: 20px;
+.login-card{
+width:100%;
+max-width:420px;
+background:#fff;
+border-radius:18px;
+padding:35px;
+box-shadow:0 20px 50px rgba(0,0,0,.25)
 }
 
-.login-card {
-
-    width: 100%;
-
-    max-width: 420px;
-
-    background: white;
-
-    border-radius: 18px;
-
-    padding: 35px;
-
-    box-shadow:
-        0 20px 50px rgba(0,0,0,.25);
+.login-logo{
+text-align:center;
+font-size:52px;
+margin-bottom:10px
 }
 
-.login-logo {
-
-    text-align: center;
-
-    font-size: 52px;
-
-    margin-bottom: 10px;
+.login-card h1{
+text-align:center;
+margin:0;
+font-size:24px
 }
 
-.login-card h1 {
-
-    text-align: center;
-
-    margin: 0;
-
-    font-size: 24px;
+.login-card p{
+text-align:center;
+color:#64748b;
+margin-bottom:30px
 }
 
-.login-card p {
+#app{display:none}
 
-    text-align: center;
-
-    color: #64748b;
-
-    margin-bottom: 30px;
+.topbar{
+min-height:70px;
+background:#0f172a;
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:12px 25px;
+position:sticky;
+top:0;
+z-index:100
 }
 
-
-/* =========================
-   APLICACIÓN
-========================= */
-
-#app {
-    display: none;
+.topbar-title{
+font-size:20px;
+font-weight:bold
 }
 
-.topbar {
-
-    min-height: 70px;
-
-    background: #0f172a;
-
-    color: white;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding: 12px 25px;
-
-    position: sticky;
-
-    top: 0;
-
-    z-index: 100;
+.topbar-user{
+display:flex;
+align-items:center;
+gap:15px;
+font-size:14px
 }
 
-.topbar-title {
-
-    font-size: 20px;
-
-    font-weight: bold;
+.container{
+max-width:1500px;
+margin:auto;
+padding:25px
 }
 
-.topbar-user {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
-
-    font-size: 14px;
+.dashboard{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:20px
 }
 
-.btn-logout {
-
-    background: #334155;
-
-    color: green;
-
-    border: none;
-
-    padding: 9px 15px;
-
-    border-radius: 8px;
-
-    cursor: pointer;
+.stat-card{
+background:#fff;
+border-radius:12px;
+padding:18px;
+box-shadow:0 2px 8px rgba(0,0,0,.06);
+border-left:5px solid
 }
 
-.btn-logout:hover {
-    background: #475569;
+.stat-card h3{
+margin:0;
+font-size:14px;
+color:#64748b
 }
 
-.container {
-
-    max-width: 1500px;
-
-    margin: auto;
-
-    padding: 25px;
+.stat-number{
+font-size:30px;
+font-weight:bold;
+margin-top:8px
 }
 
+.stat-planeado{border-color:#2196f3}
+.stat-solicitado{border-color:#eab308}
+.stat-aprobado{border-color:#9333ea}
+.stat-ejecutado{border-color:#16a34a}
 
-/* =========================
-   INDICADORES
-========================= */
-
-.dashboard {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 15px;
-
-    margin-bottom: 20px;
-}
-
-.stat-card {
-
-    background: white;
-
-    border-radius: 12px;
-
-    padding: 18px;
-
-    box-shadow:
-        0 2px 8px rgba(0,0,0,.06);
-
-    border-left: 5px solid;
-}
-
-.stat-card h3 {
-
-    margin: 0;
-
-    font-size: 14px;
-
-    color: #64748b;
-}
-
-.stat-number {
-
-    font-size: 30px;
-
-    font-weight: bold;
-
-    margin-top: 8px;
-}
-
-.stat-planeado {
-    border-color: #2196f3;
-}
-
-.stat-solicitado {
-    border-color: #eab308;
-}
-
-.stat-aprobado {
-    border-color: #9333ea;
-}
-
-.stat-ejecutado {
-    border-color: #16a34a;
-}
-
-
-/* =========================
-   BARRA DE HERRAMIENTAS
-========================= */
-
-.toolbar {
-
-    background: white;
-
-    border-radius: 12px;
-
-    padding: 15px;
-
-    display: flex;
-
-    gap: 10px;
-
-    flex-wrap: wrap;
-
-    margin-bottom: 20px;
-
-    box-shadow:
-        0 2px 8px rgba(0,0,0,.06);
+.toolbar{
+background:#fff;
+border-radius:12px;
+padding:15px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:20px;
+box-shadow:0 2px 8px rgba(0,0,0,.06)
 }
 
 .toolbar input,
-.toolbar select {
-
-    flex: 1;
-
-    min-width: 200px;
+.toolbar select{
+flex:1;
+min-width:200px
 }
 
-
-/* =========================
-   CAMPOS
-========================= */
-
-input,
-select,
-textarea {
-
-    width: 100%;
-
-    padding: 11px;
-
-    border:
-        1px solid #cbd5e1;
-
-    border-radius: 8px;
-
-    font-size: 14px;
-
-    background: white;
+input,select,textarea{
+width:100%;
+padding:11px;
+border:1px solid #cbd5e1;
+border-radius:8px;
+font-size:14px;
+background:#fff
 }
 
-textarea {
-
-    min-height: 90px;
-
-    resize: vertical;
+textarea{
+min-height:90px;
+resize:vertical
 }
 
-label {
-
-    display: block;
-
-    font-weight: bold;
-
-    margin-bottom: 6px;
-
-    font-size: 13px;
+label{
+display:block;
+font-weight:bold;
+margin-bottom:6px;
+font-size:13px
 }
 
-.form-group {
-    margin-bottom: 15px;
+.form-group{
+margin-bottom:15px
 }
 
-button {
-    cursor: pointer;
+button{
+cursor:pointer
 }
 
-.btn-primary {
-
-    background: #2563eb;
-
-    color: white;
-
-    border: none;
-
-    padding: 11px 18px;
-
-    border-radius: 8px;
-
-    font-weight: bold;
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.btn-logout{
+border:none;
+padding:11px 18px;
+border-radius:8px;
+font-weight:bold
 }
 
-.btn-primary:hover {
-    background: #1d4ed8;
+.btn-primary{
+background:#2563eb;
+color:#fff
 }
 
-.btn-secondary {
-
-    background: #64748b;
-
-    color: white;
-
-    border: none;
-
-    padding: 11px 18px;
-
-    border-radius: 8px;
+.btn-primary:hover{
+background:#1d4ed8
 }
 
-.btn-danger {
-
-    background: #dc2626;
-
-    color: white;
-
-    border: none;
-
-    padding: 11px 18px;
-
-    border-radius: 8px;
-
-    font-weight: bold;
+.btn-secondary{
+background:#64748b;
+color:#fff
 }
 
-.btn-danger:hover {
-    background: #b91c1c;
+.btn-danger{
+background:#dc2626;
+color:#fff
 }
 
-
-/* =========================
-   CALENDARIO
-========================= */
-
-.calendar-card {
-
-    background: white;
-
-    border-radius: 12px;
-
-    padding: 15px;
-
-    box-shadow:
-        0 2px 8px rgba(0,0,0,.06);
+.btn-danger:hover{
+background:#b91c1c
 }
 
-.calendar-header {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin-bottom: 15px;
+.btn-logout{
+background:#334155;
+color:#fff;
+padding:9px 15px
 }
 
-.calendar-header h2 {
-
-    margin: 0;
-
-    text-transform: capitalize;
+.calendar-card{
+background:#fff;
+border-radius:12px;
+padding:15px;
+box-shadow:0 2px 8px rgba(0,0,0,.06)
 }
 
-.calendar-buttons {
-
-    display: flex;
-
-    gap: 6px;
+.calendar-header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:15px
 }
 
-.calendar-buttons button {
-
-    border: none;
-
-    background: #e2e8f0;
-
-    padding: 8px 12px;
-
-    border-radius: 7px;
-
-    font-weight: bold;
+.calendar-header h2{
+margin:0;
+text-transform:capitalize
 }
 
-.calendar-wrapper {
-    overflow-x: auto;
+.calendar-buttons{
+display:flex;
+gap:6px
 }
 
-.calendar {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(7, minmax(120px, 1fr));
-
-    border-top:
-        1px solid #e2e8f0;
-
-    border-left:
-        1px solid #e2e8f0;
-
-    min-width: 840px;
+.calendar-buttons button{
+border:none;
+background:#e2e8f0;
+padding:8px 12px;
+border-radius:7px;
+font-weight:bold
 }
 
-.weekday {
-
-    background: #f8fafc;
-
-    font-weight: bold;
-
-    text-align: center;
-
-    padding: 10px 5px;
-
-    border-right:
-        1px solid #e2e8f0;
-
-    border-bottom:
-        1px solid #e2e8f0;
+.calendar-wrapper{
+overflow-x:auto
 }
 
-.day {
-
-    min-height: 125px;
-
-    padding: 6px;
-
-    border-right:
-        1px solid #e2e8f0;
-
-    border-bottom:
-        1px solid #e2e8f0;
-
-    background: white;
+.calendar{
+display:grid;
+grid-template-columns:repeat(7,minmax(120px,1fr));
+border-top:1px solid #e2e8f0;
+border-left:1px solid #e2e8f0;
+min-width:840px
 }
 
-.day-number {
-
-    font-weight: bold;
-
-    font-size: 13px;
-
-    margin-bottom: 5px;
+.weekday{
+background:#f8fafc;
+font-weight:bold;
+text-align:center;
+padding:10px 5px;
+border-right:1px solid #e2e8f0;
+border-bottom:1px solid #e2e8f0
 }
 
-.today {
-    background: #eff6ff;
+.day{
+min-height:125px;
+padding:6px;
+border-right:1px solid #e2e8f0;
+border-bottom:1px solid #e2e8f0;
+background:#fff
 }
 
-
-/* =========================
-   FESTIVOS
-========================= */
-
-.holiday-day {
-
-    background: #fff7ed !important;
+.day-number{
+font-weight:bold;
+font-size:13px;
+margin-bottom:5px
 }
 
-.holiday-name {
-
-    background: #f97316;
-
-    color: white;
-
-    padding: 4px 6px;
-
-    border-radius: 5px;
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    margin-bottom: 5px;
+.today{
+background:#eff6ff
 }
 
-
-/* =========================
-   PERMISOS
-========================= */
-
-.event {
-
-    color: white;
-
-    padding: 5px 7px;
-
-    border-radius: 5px;
-
-    font-size: 11px;
-
-    margin-bottom: 4px;
-
-    cursor: pointer;
-
-    overflow: hidden;
+.holiday-day{
+background:#fff7ed!important
 }
 
-.event:hover {
-    opacity: .85;
+.holiday-name{
+background:#f97316;
+color:#fff;
+padding:4px 6px;
+border-radius:5px;
+font-size:10px;
+font-weight:bold;
+margin-bottom:5px
 }
 
-.estado-PLANEADO {
-    background: #2196f3;
+.event{
+color:#fff;
+padding:5px 7px;
+border-radius:5px;
+font-size:11px;
+margin-bottom:4px;
+cursor:pointer;
+overflow:hidden
 }
 
-.estado-SOLICITADO {
-
-    background: #eab308;
-
-    color: #111827;
+.event:hover{
+opacity:.85
 }
 
-.estado-APROBADO {
-    background: #9333ea;
+.estado-PLANEADO{
+background:#2196f3
 }
 
-.estado-EJECUTADO {
-    background: #16a34a;
+.estado-SOLICITADO{
+background:#eab308;
+color:#111827
 }
 
-
-/* =========================
-   MODAL
-========================= */
-
-.modal {
-
-    display: none;
-
-    position: fixed;
-
-    inset: 0;
-
-    background:
-        rgba(15,23,42,.65);
-
-    z-index: 1000;
-
-    padding: 20px;
-
-    overflow-y: auto;
+.estado-APROBADO{
+background:#9333ea
 }
 
-.modal-content {
-
-    max-width: 850px;
-
-    margin: 30px auto;
-
-    background: white;
-
-    border-radius: 15px;
-
-    padding: 25px;
+.estado-EJECUTADO{
+background:#16a34a
 }
 
-.modal-header {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 20px;
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(15,23,42,.65);
+z-index:1000;
+padding:20px;
+overflow-y:auto
 }
 
-.modal-header h2 {
-    margin: 0;
+.modal-content{
+max-width:850px;
+margin:30px auto;
+background:#fff;
+border-radius:15px;
+padding:25px
 }
 
-.close {
-
-    border: none;
-
-    background: #e2e8f0;
-
-    width: 35px;
-
-    height: 35px;
-
-    border-radius: 50%;
-
-    font-size: 20px;
+.modal-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px
 }
 
-.form-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap: 15px;
+.modal-header h2{
+margin:0
 }
 
-.full {
-    grid-column: 1 / -1;
+.close{
+border:none;
+background:#e2e8f0;
+width:35px;
+height:35px;
+border-radius:50%;
+font-size:20px
 }
 
-.modal-actions {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    gap: 10px;
-
-    margin-top: 20px;
+.form-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px
 }
 
-.modal-actions-right {
-
-    display: flex;
-
-    gap: 10px;
+.full{
+grid-column:1/-1
 }
 
-
-/* =========================
-   MENSAJES
-========================= */
-
-.message {
-
-    padding: 12px;
-
-    border-radius: 8px;
-
-    margin-top: 10px;
-
-    display: none;
+.modal-actions{
+display:flex;
+justify-content:space-between;
+gap:10px;
+margin-top:20px
 }
 
-.message-error {
-
-    background: #fee2e2;
-
-    color: #991b1b;
+.modal-actions-right{
+display:flex;
+gap:10px
 }
 
-.message-success {
-
-    background: #dcfce7;
-
-    color: #166534;
+.message{
+padding:12px;
+border-radius:8px;
+margin-top:10px;
+display:none;
+white-space:pre-line
 }
 
-
-/* =========================
-   LEYENDA
-========================= */
-
-.legend {
-
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 12px;
-
-    margin-top: 15px;
-
-    font-size: 12px;
+.message-error{
+background:#fee2e2;
+color:#991b1b
 }
 
-.legend-item {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 5px;
+.message-success{
+background:#dcfce7;
+color:#166534
 }
 
-.legend-color {
-
-    width: 14px;
-
-    height: 14px;
-
-    border-radius: 4px;
+.legend{
+display:flex;
+flex-wrap:wrap;
+gap:12px;
+margin-top:15px;
+font-size:12px
 }
 
-.legend-holiday {
-    background: #f97316;
+.legend-item{
+display:flex;
+align-items:center;
+gap:5px
 }
 
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media(max-width: 900px) {
-
-    .dashboard {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
+.legend-color{
+width:14px;
+height:14px;
+border-radius:4px
 }
 
-@media(max-width: 650px) {
-
-    .topbar {
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 10px;
-    }
-
-    .container {
-        padding: 10px;
-    }
-
-    .dashboard {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .form-grid {
-
-        grid-template-columns: 1fr;
-    }
-
-    .full {
-        grid-column: auto;
-    }
-
-    .modal-actions {
-
-        flex-direction: column;
-    }
-
-    .modal-actions-right {
-
-        flex-direction: column;
-    }
-
+.legend-holiday{
+background:#f97316
 }
 
+.loading{
+opacity:.6;
+pointer-events:none
+}
+
+@media(max-width:900px){
+.dashboard{
+grid-template-columns:repeat(2,1fr)
+}
+}
+
+@media(max-width:650px){
+
+.topbar{
+height:auto;
+padding:15px;
+flex-direction:column;
+gap:10px;
+align-items:flex-start
+}
+
+.container{
+padding:10px
+}
+
+.dashboard{
+grid-template-columns:1fr 1fr
+}
+
+.form-grid{
+grid-template-columns:1fr
+}
+
+.full{
+grid-column:auto
+}
+
+.modal-actions,
+.modal-actions-right{
+flex-direction:column
+}
+
+.calendar{
+min-width:750px
+}
+
+}
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =====================================================
-     LOGIN
-===================================================== -->
-
 <div id="loginScreen">
 
-    <div class="login-card">
+<div class="login-card">
 
-        <div class="login-logo">
-            ⚡
-        </div>
+<div class="login-logo">⚡</div>
 
-        <h1>
-            Permisos Operativos
-        </h1>
+<h1>Permisos Operativos</h1>
 
-        <p>
-            Regional Aguachica
-        </p>
+<p>Regional Aguachica</p>
 
-
-        <div class="form-group">
-
-            <label>
-                Correo electrónico
-            </label>
-
-            <input
-                type="email"
-                id="loginEmail"
-                placeholder="usuario@empresa.com"
-            >
-
-        </div>
-
-
-        <div class="form-group">
-
-            <label>
-                Contraseña
-            </label>
-
-            <input
-                type="password"
-                id="loginPassword"
-                placeholder="Contraseña"
-            >
-
-        </div>
-
-
-        <button
-            class="btn-primary"
-            style="width:100%"
-            onclick="login()"
-        >
-            🔐 Ingresar
-        </button>
-
-
-        <div
-            id="loginMessage"
-            class="message message-error"
-        ></div>
-
-    </div>
-
+<div class="form-group">
+<label>Correo electrónico</label>
+<input
+type="email"
+id="loginEmail"
+placeholder="usuario@empresa.com">
 </div>
 
+<div class="form-group">
+<label>Contraseña</label>
+<input
+type="password"
+id="loginPassword"
+placeholder="Contraseña">
+</div>
 
-<!-- =====================================================
-     APLICACIÓN
-===================================================== -->
+<button
+class="btn-primary"
+style="width:100%"
+onclick="login()">
+🔐 Ingresar
+</button>
+
+<div
+id="loginMessage"
+class="message message-error">
+</div>
+
+</div>
+</div>
 
 <div id="app">
 
-
-    <div class="topbar">
-
-        <div class="topbar-title">
-            ⚡ PLANIFICADOR DE PERMISOS OPERATIVOS REGIONAL AGUACHICA
-        </div>
-
-
-        <div class="topbar-user">
-
-            <span id="currentUser"></span>
-
-            <button
-                class="btn-logout"
-                onclick="logout()"
-            >
-                Salir
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div class="container">
-
-
-        <!-- INDICADORES -->
-
-        <div class="dashboard">
-
-
-            <div class="stat-card stat-planeado">
-
-                <h3>
-                    🔵 PLANEADOS
-                </h3>
-
-                <div
-                    class="stat-number"
-                    id="countPlaneado"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card stat-solicitado">
-
-                <h3>
-                    🟡 SOLICITADOS
-                </h3>
-
-                <div
-                    class="stat-number"
-                    id="countSolicitado"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card stat-aprobado">
-
-                <h3>
-                    🟣 APROBADOS
-                </h3>
-
-                <div
-                    class="stat-number"
-                    id="countAprobado"
-                >
-                    0
-                </div>
-
-            </div>
-
-
-            <div class="stat-card stat-ejecutado">
-
-                <h3>
-                    🟢 EJECUTADOS
-                </h3>
-
-                <div
-                    class="stat-number"
-                    id="countEjecutado"
-                >
-                    0
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- FILTROS -->
-
-        <div class="toolbar">
-
-
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="🔎 Buscar PO, actividad, Municipio, Alimentador..."
-                oninput="renderCalendar()"
-            >
-
-
-            <select
-                id="filterEstado"
-                onchange="renderCalendar()"
-            >
-
-                <option value="">
-                    Todos los estados
-                </option>
-
-                <option value="PLANEADO">
-                    🔵 Planeado
-                </option>
-
-                <option value="SOLICITADO">
-                    🟡 Solicitado
-                </option>
-
-                <option value="APROBADO">
-                    🟣 Aprobado
-                </option>
-
-                <option value="EJECUTADO">
-                    🟢 Ejecutado
-                </option>
-
-            </select>
-
-
-            <button
-                class="btn-primary"
-                onclick="openNewPermission()"
-            >
-                + Nuevo permiso
-            </button>
-
-        </div>
-
-
-        <!-- CALENDARIO -->
-
-        <div class="calendar-card">
-
-
-            <div class="calendar-header">
-
-                <h2 id="monthTitle"></h2>
-
-
-                <div class="calendar-buttons">
-
-                    <button onclick="previousMonth()">
-                        ◀
-                    </button>
-
-                    <button onclick="goToday()">
-                        Hoy
-                    </button>
-
-                    <button onclick="nextMonth()">
-                        ▶
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="calendar-wrapper">
-
-                <div
-                    class="calendar"
-                    id="calendar"
-                ></div>
-
-            </div>
-
-
-            <div class="legend">
-
-
-                <div class="legend-item">
-
-                    <span
-                        class="legend-color"
-                        style="background:#2196f3"
-                    ></span>
-
-                    Planeado
-
-                </div>
-
-
-                <div class="legend-item">
-
-                    <span
-                        class="legend-color"
-                        style="background:#eab308"
-                    ></span>
-
-                    Solicitado
-
-                </div>
-
-
-                <div class="legend-item">
-
-                    <span
-                        class="legend-color"
-                        style="background:#9333ea"
-                    ></span>
-
-                    Aprobado
-
-                </div>
-
-
-                <div class="legend-item">
-
-                    <span
-                        class="legend-color"
-                        style="background:#16a34a"
-                    ></span>
-
-                    Ejecutado
-
-                </div>
-
-
-                <div class="legend-item">
-
-                    <span
-                        class="legend-color legend-holiday"
-                    ></span>
-
-                    Festivo Colombia
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-    </div>
+<div class="topbar">
+
+<div class="topbar-title">
+⚡ PLANIFICADOR DE PERMISOS OPERATIVOS REGIONAL AGUACHICA
+</div>
+
+<div class="topbar-user">
+
+<span id="currentUser"></span>
+
+<button
+class="btn-logout"
+onclick="logout()">
+Salir
+</button>
+
+</div>
+</div>
+
+<div class="container">
+
+<div class="dashboard">
+
+<div class="stat-card stat-planeado">
+<h3>🔵 PLANEADOS</h3>
+<div
+class="stat-number"
+id="countPlaneado">
+0
+</div>
+</div>
+
+<div class="stat-card stat-solicitado">
+<h3>🟡 SOLICITADOS</h3>
+<div
+class="stat-number"
+id="countSolicitado">
+0
+</div>
+</div>
+
+<div class="stat-card stat-aprobado">
+<h3>🟣 APROBADOS</h3>
+<div
+class="stat-number"
+id="countAprobado">
+0
+</div>
+</div>
+
+<div class="stat-card stat-ejecutado">
+<h3>🟢 EJECUTADOS</h3>
+<div
+class="stat-number"
+id="countEjecutado">
+0
+</div>
+</div>
 
 </div>
 
+<div class="toolbar">
 
-<!-- =====================================================
-     MODAL
-===================================================== -->
+<input
+type="text"
+id="searchInput"
+placeholder="🔎 Buscar PO, actividad, municipio, zona, alimentador, CTO..."
+oninput="renderCalendar()">
+
+<select
+id="filterEstado"
+onchange="renderCalendar()">
+
+<option value="">
+Todos los estados
+</option>
+
+<option value="PLANEADO">
+🔵 Planeado
+</option>
+
+<option value="SOLICITADO">
+🟡 Solicitado
+</option>
+
+<option value="APROBADO">
+🟣 Aprobado
+</option>
+
+<option value="EJECUTADO">
+🟢 Ejecutado
+</option>
+
+</select>
+
+<button
+class="btn-primary"
+onclick="openNewPermission()">
++ Nuevo permiso
+</button>
+
+</div>
+
+<div class="calendar-card">
+
+<div class="calendar-header">
+
+<h2 id="monthTitle"></h2>
+
+<div class="calendar-buttons">
+
+<button onclick="previousMonth()">◀</button>
+
+<button onclick="goToday()">Hoy</button>
+
+<button onclick="nextMonth()">▶</button>
+
+</div>
+</div>
+
+<div class="calendar-wrapper">
 
 <div
-    id="permissionModal"
-    class="modal"
->
-
-
-    <div class="modal-content">
-
-
-        <div class="modal-header">
-
-            <h2 id="modalTitle">
-                Nuevo permiso operativo
-            </h2>
-
-
-            <button
-                class="close"
-                onclick="closeModal()"
-            >
-                ×
-            </button>
-
-        </div>
-
-
-        <input
-            type="hidden"
-            id="permissionId"
-        >
-
-
-        <div class="form-grid">
-
-
-            <div class="form-group">
-
-                <label>
-                    Número PO
-                </label>
-
-                <input
-                    id="numero_po"
-                    placeholder="Ej: 841099"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Estado
-                </label>
-
-                <select id="estado">
-
-                    <option value="PLANEADO">
-                        🔵 PLANEADO
-                    </option>
-
-                    <option value="SOLICITADO">
-                        🟡 SOLICITADO
-                    </option>
-
-                    <option value="APROBADO">
-                        🟣 APROBADO
-                    </option>
-
-                    <option value="EJECUTADO">
-                        🟢 EJECUTADO
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-group full">
-
-                <label>
-                    Actividad
-                </label>
-
-                <input
-                    id="actividad"
-                    placeholder="Descripción de la actividad"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Fecha de ejecución
-                </label>
-
-                <input
-                    type="date"
-                    id="fecha_ejecucion"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Municipio
-                </label>
-
-                <input
-                    id="municipio"
-                    placeholder="Ej: Aguachica"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Hora inicio 
-                </label>
-
-                <input
-                    type="time"
-                    id="hora_inicio"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Hora finalización
-                </label>
-
-                <input
-                    type="time"
-                    id="hora_finalización"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Barrio
-                </label>
-
-                <input id="Barrio">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Alimentador
-                </label>
-
-                <input id="alimentador">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    CIRCUITO
-                </label>
-
-                <input id="CIRCUITO">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Responsable
-                </label>
-
-                <input id="responsable">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Contratista
-                </label>
-
-                <input id="contratista">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Planeador
-                </label>
-
-                <input id="planeador">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Fecha solicitud
-                </label>
-
-                <input
-                    type="date"
-                    id="fecha_solicitud"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Fecha aprobación
-                </label>
-
-                <input
-                    type="date"
-                    id="fecha_aprobacion"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Fecha ejecución real
-                </label>
-
-                <input
-                    type="date"
-                    id="fecha_ejecucion_real"
-                >
-
-            </div>
-
-
-            <div class="form-group full">
-
-                <label>
-                    Observaciones
-                </label>
-
-                <textarea
-                    id="observaciones"
-                    placeholder="Observaciones del permiso..."
-                ></textarea>
-
-            </div>
-
-        </div>
-
-
-        <div
-            id="formMessage"
-            class="message"
-        ></div>
-
-
-        <div class="modal-actions">
-
-
-            <div>
-
-                <button
-                    id="btnEliminar"
-                    class="btn-danger"
-                    onclick="deletePermission()"
-                    style="display:none"
-                >
-                    🗑️ Eliminar permiso
-                </button>
-
-            </div>
-
-
-            <div class="modal-actions-right">
-
-                <button
-                    class="btn-secondary"
-                    onclick="closeModal()"
-                >
-                    Cancelar
-                </button>
-
-
-                <button
-                    class="btn-primary"
-                    onclick="savePermission()"
-                >
-                    💾 Guardar permiso
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
+class="calendar"
+id="calendar">
+</div>
 
 </div>
 
+<div class="legend">
+
+<div class="legend-item">
+<span
+class="legend-color"
+style="background:#2196f3">
+</span>
+Planeado
+</div>
+
+<div class="legend-item">
+<span
+class="legend-color"
+style="background:#eab308">
+</span>
+Solicitado
+</div>
+
+<div class="legend-item">
+<span
+class="legend-color"
+style="background:#9333ea">
+</span>
+Aprobado
+</div>
+
+<div class="legend-item">
+<span
+class="legend-color"
+style="background:#16a34a">
+</span>
+Ejecutado
+</div>
+
+<div class="legend-item">
+<span
+class="legend-color legend-holiday">
+</span>
+Festivo Colombia
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="permissionModal" class="modal">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h2 id="modalTitle">
+Nuevo permiso operativo
+</h2>
+
+<button
+class="close"
+onclick="closeModal()">
+×
+</button>
+
+</div>
+
+<input
+type="hidden"
+id="permissionId">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Número PO</label>
+<input
+id="numero_po"
+placeholder="Ej: 841099">
+</div>
+
+<div class="form-group">
+
+<label>Estado</label>
+
+<select id="estado">
+
+<option value="PLANEADO">
+🔵 PLANEADO
+</option>
+
+<option value="SOLICITADO">
+🟡 SOLICITADO
+</option>
+
+<option value="APROBADO">
+🟣 APROBADO
+</option>
+
+<option value="EJECUTADO">
+🟢 EJECUTADO
+</option>
+
+</select>
+
+</div>
+
+<div class="form-group full">
+
+<label>Actividad / Descripción</label>
+
+<input
+id="actividad"
+placeholder="Descripción de la actividad">
+
+</div>
+
+<div class="form-group">
+
+<label>Fecha de ejecución</label>
+
+<input
+type="date"
+id="fecha_ejecucion">
+
+</div>
+
+<div class="form-group">
+
+<label>Municipio</label>
+
+<input
+id="municipio"
+placeholder="Ej: Aguachica">
+
+</div>
+
+<div class="form-group">
+
+<label>Hora inicio</label>
+
+<input
+type="time"
+id="hora_inicio">
+
+</div>
+
+<div class="form-group">
+
+<label>Hora finalización</label>
+
+<input
+type="time"
+id="hora_fin">
+
+</div>
+
+<div class="form-group">
+
+<label>Zona</label>
+
+<input
+id="zona"
+placeholder="Zona urbana/rural">
+
+</div>
+
+<div class="form-group">
+
+<label>Alimentador</label>
+
+<input
+id="alimentador">
+
+</div>
+
+<div class="form-group">
+
+<label>CTO</label>
+
+<input
+id="cto"
+placeholder="Circuito / CTO">
+
+</div>
+
+<div class="form-group">
+
+<label>Responsable</label>
+
+<input
+id="responsable">
+
+</div>
+
+<div class="form-group">
+
+<label>Contratista</label>
+
+<input
+id="contratista">
+
+</div>
+
+<div class="form-group">
+
+<label>Planeador</label>
+
+<input
+id="planeador">
+
+</div>
+
+<div class="form-group">
+
+<label>Fecha solicitud</label>
+
+<input
+type="date"
+id="fecha_solicitud">
+
+</div>
+
+<div class="form-group">
+
+<label>Fecha aprobación</label>
+
+<input
+type="date"
+id="fecha_aprobacion">
+
+</div>
+
+<div class="form-group">
+
+<label>Fecha ejecución real</label>
+
+<input
+type="date"
+id="fecha_ejecucion_real">
+
+</div>
+
+<div class="form-group full">
+
+<label>Observaciones</label>
+
+<textarea
+id="observaciones"
+placeholder="Observaciones del permiso...">
+</textarea>
+
+</div>
+
+</div>
+
+<div
+id="formMessage"
+class="message">
+</div>
+
+<div class="modal-actions">
+
+<button
+id="btnEliminar"
+class="btn-danger"
+onclick="deletePermission()"
+style="display:none">
+🗑️ Eliminar permiso
+</button>
+
+<div class="modal-actions-right">
+
+<button
+class="btn-secondary"
+onclick="closeModal()">
+Cancelar
+</button>
+
+<button
+id="btnGuardar"
+class="btn-primary"
+onclick="savePermission()">
+💾 Guardar permiso
+</button>
+
+</div>
+
+</div>
+
+</div>
+</div>
 
 <script>
 
-
-/* =====================================================
-   SUPABASE
-===================================================== */
-
 const SUPABASE_URL =
-    "https://lhdbpwaxzthumsflvmkm.supabase.co";
+"https://lhdbpwaxzthumsflvmkm.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_86bRK3rezZLTS7B7AVOv-g_hlT_XAiE";
+"sb_publishable_86bRK3rezZLTS7B7AVOv-g_hlT_XAiE";
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-
-/* =====================================================
-   VARIABLES
-===================================================== */
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 let permisos = [];
 
@@ -1481,1983 +956,765 @@ let currentDate = new Date();
 
 let editingId = null;
 
-
-/* =====================================================
-   LOGIN
-===================================================== */
-
-async function login() {
-
-    const email =
-        document
-            .getElementById("loginEmail")
-            .value
-            .trim();
-
-    const password =
-        document
-            .getElementById("loginPassword")
-            .value;
+let saving = false;
 
 
-    if (!email || !password) {
+/* ---------------- AUTH ---------------- */
 
-        showLoginMessage(
-            "Ingrese correo y contraseña."
-        );
+async function login(){
 
-        return;
-    }
+const email =
+getValue("loginEmail");
 
+const password =
+document.getElementById("loginPassword").value;
 
-    try {
+if(!email || !password){
 
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .auth
-            .signInWithPassword({
+showLoginMessage(
+"Ingrese correo y contraseña."
+);
 
-                email: email,
+return;
+}
 
-                password: password
+try{
 
-            });
+const {data,error} =
+await supabaseClient.auth.signInWithPassword({
+email,
+password
+});
 
+if(error){
 
-        if (error) {
+showLoginMessage(
+"No fue posible iniciar sesión: "
++ error.message
+);
 
-            showLoginMessage(
-                "No fue posible iniciar sesión: " +
-                error.message
-            );
+return;
+}
 
-            return;
-        }
+showApplication(data.user);
 
+}catch(e){
 
-        showApplication(
-            data.user
-        );
+showLoginMessage(
+"Error de conexión con Supabase: "
++ e.message
+);
 
+}
 
-    } catch (error) {
+}
 
-        showLoginMessage(
-            "Error de conexión con Supabase: " +
-            error.message
-        );
+function showApplication(user){
 
-    }
+document.getElementById(
+"loginScreen"
+).style.display="none";
+
+document.getElementById(
+"app"
+).style.display="block";
+
+document.getElementById(
+"currentUser"
+).textContent =
+user?.email || "Usuario";
+
+loadPermissions();
+
+}
+
+async function logout(){
+
+await supabaseClient.auth.signOut();
+
+location.reload();
+
+}
+
+function showLoginMessage(message){
+
+const b =
+document.getElementById(
+"loginMessage"
+);
+
+b.textContent=message;
+
+b.style.display="block";
 
 }
 
 
-/* =====================================================
-   MOSTRAR APP
-===================================================== */
+/* ---------------- DATA ---------------- */
 
-function showApplication(user) {
+async function loadPermissions(){
 
-    document
-        .getElementById("loginScreen")
-        .style.display = "none";
+const {data,error} =
+await supabaseClient
+.from("permisos")
+.select("*")
+.order(
+"fecha_ejecucion",
+{ascending:true}
+);
 
+if(error){
 
-    document
-        .getElementById("app")
-        .style.display = "block";
+console.error(error);
 
+alert(
+"Error cargando permisos:\n\n"
++ error.message
+);
 
-    document
-        .getElementById("currentUser")
-        .textContent =
-        user.email;
+return;
+}
 
+permisos=data||[];
 
-    loadPermissions();
+updateDashboard();
+
+renderCalendar();
+
+}
+
+function updateDashboard(){
+
+[
+"PLANEADO",
+"SOLICITADO",
+"APROBADO",
+"EJECUTADO"
+].forEach(e=>{
+
+const id =
+"count"
++ e.charAt(0)
++ e.slice(1).toLowerCase();
+
+document.getElementById(id)
+.textContent =
+permisos.filter(
+p =>
+String(
+p.estado||""
+).toUpperCase()===e
+).length;
+
+});
 
 }
 
 
-/* =====================================================
-   LOGOUT
-===================================================== */
+/* ---------------- FESTIVOS COLOMBIA ---------------- */
 
-async function logout() {
+function calcularPascua(year){
 
-    await supabaseClient
-        .auth
-        .signOut();
+const a=year%19,
+b=Math.floor(year/100),
+c=year%100,
+d=Math.floor(b/4),
+e=b%4,
+f=Math.floor((b+8)/25),
+g=Math.floor((b-f+1)/3);
 
-    location.reload();
+const h =
+(19*a+b-d-g+15)%30;
+
+const i=Math.floor(c/4);
+
+const k=c%4;
+
+const l =
+(32+2*e+2*i-h-k)%7;
+
+const m =
+Math.floor((a+11*h+22*l)/451);
+
+const month =
+Math.floor(
+(h+l-7*m+114)/31
+);
+
+const day =
+((h+l-7*m+114)%31)+1;
+
+return new Date(
+year,
+month-1,
+day
+);
+
+}
+
+function siguienteLunes(date){
+
+const d=new Date(date);
+
+const day=d.getDay();
+
+if(day===0){
+
+d.setDate(
+d.getDate()+1
+);
+
+}else if(day!==1){
+
+d.setDate(
+d.getDate()+(8-day)
+);
+
+}
+
+return d;
+
+}
+
+function getColombianHolidays(year){
+
+const h={};
+
+const add=(d,n)=>
+h[formatDate(d)]=n;
+
+const fixedMonday=(m,d,n)=>
+add(
+siguienteLunes(
+new Date(year,m-1,d)
+),
+n
+);
+
+add(
+new Date(year,0,1),
+"Año Nuevo"
+);
+
+add(
+new Date(year,4,1),
+"Día del Trabajo"
+);
+
+add(
+new Date(year,6,20),
+"Independencia de Colombia"
+);
+
+add(
+new Date(year,7,7),
+"Batalla de Boyacá"
+);
+
+add(
+new Date(year,11,8),
+"Inmaculada Concepción"
+);
+
+add(
+new Date(year,11,25),
+"Navidad"
+);
+
+fixedMonday(
+1,
+6,
+"Día de los Reyes Magos"
+);
+
+fixedMonday(
+3,
+19,
+"Día de San José"
+);
+
+fixedMonday(
+6,
+29,
+"San Pedro y San Pablo"
+);
+
+fixedMonday(
+8,
+15,
+"Asunción de la Virgen"
+);
+
+fixedMonday(
+10,
+12,
+"Día de la Raza"
+);
+
+fixedMonday(
+11,
+1,
+"Todos los Santos"
+);
+
+fixedMonday(
+11,
+11,
+"Independencia de Cartagena"
+);
+
+const easter =
+calcularPascua(year);
+
+const j =
+new Date(easter);
+
+j.setDate(
+j.getDate()-3
+);
+
+add(
+j,
+"Jueves Santo"
+);
+
+const v =
+new Date(easter);
+
+v.setDate(
+v.getDate()-2
+);
+
+add(
+v,
+"Viernes Santo"
+);
+
+const asc =
+new Date(easter);
+
+asc.setDate(
+asc.getDate()+43
+);
+
+add(
+siguienteLunes(asc),
+"Ascensión del Señor"
+);
+
+const corpus =
+new Date(easter);
+
+corpus.setDate(
+corpus.getDate()+64
+);
+
+add(
+siguienteLunes(corpus),
+"Corpus Christi"
+);
+
+const sc =
+new Date(easter);
+
+sc.setDate(
+sc.getDate()+71
+);
+
+add(
+siguienteLunes(sc),
+"Sagrado Corazón de Jesús"
+);
+
+return h;
 
 }
 
 
-/* =====================================================
-   MENSAJE LOGIN
-===================================================== */
+/* ---------------- CALENDAR ---------------- */
 
-function showLoginMessage(message) {
+function renderCalendar(){
 
-    const box =
-        document.getElementById(
-            "loginMessage"
-        );
+const calendar =
+document.getElementById(
+"calendar"
+);
 
-    box.textContent =
-        message;
+calendar.innerHTML="";
 
-    box.style.display =
-        "block";
+const year =
+currentDate.getFullYear();
+
+const month =
+currentDate.getMonth();
+
+document.getElementById(
+"monthTitle"
+).textContent =
+currentDate.toLocaleDateString(
+"es-CO",
+{
+month:"long",
+year:"numeric"
+}
+);
+
+const holidays =
+getColombianHolidays(year);
+
+[
+"LUN",
+"MAR",
+"MIÉ",
+"JUE",
+"VIE",
+"SÁB",
+"DOM"
+].forEach(n=>{
+
+const x =
+document.createElement(
+"div"
+);
+
+x.className="weekday";
+
+x.textContent=n;
+
+calendar.appendChild(x);
+
+});
+
+let first =
+new Date(
+year,
+month,
+1
+).getDay();
+
+first =
+first===0
+?6
+:first-1;
+
+for(
+let i=0;
+i<first;
+i++
+){
+
+const x =
+document.createElement(
+"div"
+);
+
+x.className="day";
+
+calendar.appendChild(x);
+
+}
+
+const days =
+new Date(
+year,
+month+1,
+0
+).getDate();
+
+const today =
+formatDate(
+new Date()
+);
+
+for(
+let n=1;
+n<=days;
+n++
+){
+
+const d =
+new Date(
+year,
+month,
+n
+);
+
+const ds =
+formatDate(d);
+
+const day =
+document.createElement(
+"div"
+);
+
+day.className="day";
+
+if(ds===today)
+day.classList.add(
+"today"
+);
+
+const num =
+document.createElement(
+"div"
+);
+
+num.className=
+"day-number";
+
+num.textContent=n;
+
+day.appendChild(num);
+
+if(holidays[ds]){
+
+day.classList.add(
+"holiday-day"
+);
+
+const hh =
+document.createElement(
+"div"
+);
+
+hh.className=
+"holiday-name";
+
+hh.textContent =
+"🇨🇴 "
++ holidays[ds];
+
+day.appendChild(hh);
+
+}
+
+getFilteredPermissions()
+.filter(
+p =>
+normalizeDate(
+p.fecha_ejecucion
+)===ds
+)
+.forEach(p=>{
+
+const ev =
+document.createElement(
+"div"
+);
+
+ev.className =
+"event estado-"
++ String(
+p.estado||"PLANEADO"
+).toUpperCase();
+
+ev.innerHTML =
+"<strong>PO "
++ escapeHtml(
+p.numero_po||""
+)
++ "</strong><br>"
++ escapeHtml(
+p.actividad||""
+);
+
+ev.onclick =
+()=>openEditPermissionById(
+p.id
+);
+
+day.appendChild(ev);
+
+});
+
+calendar.appendChild(day);
+
+}
+
+}
+
+function getFilteredPermissions(){
+
+const search =
+getValue(
+"searchInput"
+).toLowerCase();
+
+const estado =
+getValue(
+"filterEstado"
+);
+
+return permisos.filter(p=>{
+
+const text=[
+p.numero_po,
+p.actividad,
+p.municipio,
+p.zona,
+p.alimentador,
+p.cto,
+p.responsable,
+p.contratista,
+p.planeador
+]
+.join(" ")
+.toLowerCase();
+
+return (
+(!search ||
+text.includes(search))
+&&
+(!estado ||
+p.estado===estado)
+);
+
+});
+
+}
+
+function previousMonth(){
+
+currentDate.setMonth(
+currentDate.getMonth()-1
+);
+
+renderCalendar();
+
+}
+
+function nextMonth(){
+
+currentDate.setMonth(
+currentDate.getMonth()+1
+);
+
+renderCalendar();
+
+}
+
+function goToday(){
+
+currentDate=new Date();
+
+renderCalendar();
 
 }
 
 
-/* =====================================================
-   CARGAR PERMISOS
-===================================================== */
+/* ---------------- FORM ---------------- */
 
-async function loadPermissions() {
+function openNewPermission(){
 
-    try {
+editingId=null;
 
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from("permisos")
-            .select("*")
-            .order(
-                "fecha_ejecucion",
-                {
-                    ascending: true
-                }
-            );
+clearForm();
 
+document.getElementById(
+"modalTitle"
+).textContent =
+"Nuevo permiso operativo";
 
-        if (error) {
+document.getElementById(
+"estado"
+).value="PLANEADO";
 
-            console.error(
-                "Error cargando permisos:",
-                error
-            );
+document.getElementById(
+"fecha_ejecucion"
+).value =
+formatDate(new Date());
 
-            alert(
-                "Error cargando permisos:\n\n" +
-                error.message
-            );
+document.getElementById(
+"btnEliminar"
+).style.display="none";
 
-            return;
-        }
-
-
-        permisos = data || [];
-
-
-        updateDashboard();
-
-        renderCalendar();
-
-
-        console.log(
-            "Permisos cargados:",
-            permisos.length
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Error inesperado cargando permisos:",
-            error
-        );
-
-    }
+document.getElementById(
+"permissionModal"
+).style.display="block";
 
 }
 
+async function openEditPermissionById(id){
 
-/* =====================================================
-   INDICADORES
-===================================================== */
+const numericId=Number(id);
 
-function updateDashboard() {
+if(!Number.isInteger(numericId)){
 
-    document
-        .getElementById("countPlaneado")
-        .textContent =
-        permisos.filter(
-            p =>
-                p.estado === "PLANEADO"
-        ).length;
+alert(
+"El ID del permiso no es válido."
+);
 
-
-    document
-        .getElementById("countSolicitado")
-        .textContent =
-        permisos.filter(
-            p =>
-                p.estado === "SOLICITADO"
-        ).length;
-
-
-    document
-        .getElementById("countAprobado")
-        .textContent =
-        permisos.filter(
-            p =>
-                p.estado === "APROBADO"
-        ).length;
-
-
-    document
-        .getElementById("countEjecutado")
-        .textContent =
-        permisos.filter(
-            p =>
-                p.estado === "EJECUTADO"
-        ).length;
+return;
 
 }
 
+const {data,error} =
+await supabaseClient
+.from("permisos")
+.select("*")
+.eq("id",numericId)
+.single();
 
-/* =====================================================
-   PASCUA
-===================================================== */
+if(error||!data){
 
-function calcularPascua(year) {
+alert(
+"No fue posible cargar el permiso seleccionado:\n\n"
++
+(error?.message||
+"Registro no encontrado")
+);
 
-    const a = year % 19;
-
-    const b = Math.floor(
-        year / 100
-    );
-
-    const c = year % 100;
-
-    const d = Math.floor(
-        b / 4
-    );
-
-    const e = b % 4;
-
-    const f = Math.floor(
-        (b + 8) / 25
-    );
-
-    const g = Math.floor(
-        (b - f + 1) / 3
-    );
-
-    const h =
-        (
-            19 * a +
-            b -
-            d -
-            g +
-            15
-        ) % 30;
-
-    const i =
-        Math.floor(
-            c / 4
-        );
-
-    const k = c % 4;
-
-    const l =
-        (
-            32 +
-            2 * e +
-            2 * i -
-            h -
-            k
-        ) % 7;
-
-    const m =
-        Math.floor(
-            (
-                a +
-                11 * h +
-                22 * l
-            ) / 451
-        );
-
-    const month =
-        Math.floor(
-            (
-                h +
-                l -
-                7 * m +
-                114
-            ) / 31
-        );
-
-    const day =
-        (
-            (
-                h +
-                l -
-                7 * m +
-                114
-            ) % 31
-        ) + 1;
-
-
-    return new Date(
-        year,
-        month - 1,
-        day
-    );
+return;
 
 }
 
+editingId=numericId;
 
-/* =====================================================
-   SIGUIENTE LUNES
-===================================================== */
+document.getElementById(
+"modalTitle"
+).textContent =
+"Editar permiso operativo";
 
-function siguienteLunes(date) {
+setValue(
+"permissionId",
+numericId
+);
 
-    const result =
-        new Date(date);
+[
+"numero_po",
+"actividad",
+"fecha_ejecucion",
+"hora_inicio",
+"hora_fin",
+"municipio",
+"zona",
+"alimentador",
+"cto",
+"responsable",
+"contratista",
+"planeador",
+"estado",
+"fecha_solicitud",
+"fecha_aprobacion",
+"fecha_ejecucion_real",
+"observaciones"
+]
+.forEach(
+k =>
+setValue(
+k,
+data[k]
+)
+);
 
-    const day =
-        result.getDay();
+document.getElementById(
+"btnEliminar"
+).style.display=
+"inline-block";
 
-
-    if (day === 0) {
-
-        result.setDate(
-            result.getDate() + 1
-        );
-
-    }
-    else if (day !== 1) {
-
-        result.setDate(
-            result.getDate() +
-            (8 - day)
-        );
-
-    }
-
-
-    return result;
+document.getElementById(
+"permissionModal"
+).style.display=
+"block";
 
 }
-
-
-/* =====================================================
-   FESTIVOS COLOMBIA
-===================================================== */
-
-function getColombianHolidays(year) {
-
-    const holidays = {};
-
-
-    function add(date, name) {
-
-        holidays[
-            formatDate(date)
-        ] = name;
-
-    }
-
-
-    function fixed(
-        month,
-        day,
-        name
-    ) {
-
-        const date =
-            new Date(
-                year,
-                month - 1,
-                day
-            );
-
-
-        if (
-            date.getDay() === 1
-        ) {
-
-            add(
-                date,
-                name
-            );
-
-        }
-        else {
-
-            add(
-                siguienteLunes(date),
-                name
-            );
-
-        }
-
-    }
-
-
-    /* Festivos fijos */
-
-    add(
-        new Date(year, 0, 1),
-        "Año Nuevo"
-    );
-
-
-    add(
-        new Date(year, 4, 1),
-        "Día del Trabajo"
-    );
-
-
-    add(
-        new Date(year, 6, 20),
-        "Independencia de Colombia"
-    );
-
-
-    add(
-        new Date(year, 7, 7),
-        "Batalla de Boyacá"
-    );
-
-
-    add(
-        new Date(year, 11, 8),
-        "Inmaculada Concepción"
-    );
-
-
-    add(
-        new Date(year, 11, 25),
-        "Navidad"
-    );
-
-
-    /* Festivos Ley Emiliani */
-
-    fixed(
-        1,
-        6,
-        "Día de los Reyes Magos"
-    );
-
-
-    fixed(
-        3,
-        19,
-        "Día de San José"
-    );
-
-
-    fixed(
-        6,
-        29,
-        "San Pedro y San Pablo"
-    );
-
-
-    fixed(
-        8,
-        15,
-        "Asunción de la Virgen"
-    );
-
-
-    fixed(
-        10,
-        12,
-        "Día de la Raza"
-    );
-
-
-    fixed(
-        11,
-        1,
-        "Todos los Santos"
-    );
-
-
-    fixed(
-        11,
-        11,
-        "Independencia de Cartagena"
-    );
-
-
-    /* Semana Santa */
-
-    const easter =
-        calcularPascua(year);
-
-
-    const juevesSanto =
-        new Date(easter);
-
-    juevesSanto.setDate(
-        easter.getDate() - 3
-    );
-
-
-    const viernesSanto =
-        new Date(easter);
-
-    viernesSanto.setDate(
-        easter.getDate() - 2
-    );
-
-
-    add(
-        juevesSanto,
-        "Jueves Santo"
-    );
-
-
-    add(
-        viernesSanto,
-        "Viernes Santo"
-    );
-
-
-    /* Ascensión */
-
-    const ascension =
-        new Date(easter);
-
-    ascension.setDate(
-        easter.getDate() + 43
-    );
-
-
-    add(
-        siguienteLunes(ascension),
-        "Ascensión del Señor"
-    );
-
-
-    /* Corpus Christi */
-
-    const corpus =
-        new Date(easter);
-
-    corpus.setDate(
-        easter.getDate() + 64
-    );
-
-
-    add(
-        siguienteLunes(corpus),
-        "Corpus Christi"
-    );
-
-
-    /* Sagrado Corazón */
-
-    const sagradoCorazon =
-        new Date(easter);
-
-    sagradoCorazon.setDate(
-        easter.getDate() + 71
-    );
-
-
-    add(
-        siguienteLunes(
-            sagradoCorazon
-        ),
-        "Sagrado Corazón de Jesús"
-    );
-
-
-    return holidays;
-
-}
-
-
-/* =====================================================
-   CALENDARIO
-===================================================== */
-
-function renderCalendar() {
-
-    const calendar =
-        document.getElementById(
-            "calendar"
-        );
-
-
-    calendar.innerHTML = "";
-
-
-    const year =
-        currentDate.getFullYear();
-
-
-    const month =
-        currentDate.getMonth();
-
-
-    document
-        .getElementById(
-            "monthTitle"
-        )
-        .textContent =
-        currentDate.toLocaleDateString(
-            "es-CO",
-            {
-                month: "long",
-                year: "numeric"
-            }
-        );
-
-
-    const holidays =
-        getColombianHolidays(
-            year
-        );
-
-
-    const weekdays = [
-
-        "LUN",
-        "MAR",
-        "MIÉ",
-        "JUE",
-        "VIE",
-        "SÁB",
-        "DOM"
-
-    ];
-
-
-    weekdays.forEach(
-        name => {
-
-            const header =
-                document.createElement(
-                    "div"
-                );
-
-            header.className =
-                "weekday";
-
-            header.textContent =
-                name;
-
-            calendar.appendChild(
-                header
-            );
-
-        }
-    );
-
-
-    let firstDay =
-        new Date(
-            year,
-            month,
-            1
-        ).getDay();
-
-
-    firstDay =
-        firstDay === 0
-            ? 6
-            : firstDay - 1;
-
-
-    const daysInMonth =
-        new Date(
-            year,
-            month + 1,
-            0
-        ).getDate();
-
-
-    /* Espacios */
-
-    for (
-        let i = 0;
-        i < firstDay;
-        i++
-    ) {
-
-        const empty =
-            document.createElement(
-                "div"
-            );
-
-        empty.className =
-            "day";
-
-        calendar.appendChild(
-            empty
-        );
-
-    }
-
-
-    /* Días */
-
-    for (
-        let dayNumber = 1;
-        dayNumber <= daysInMonth;
-        dayNumber++
-    ) {
-
-
-        const day =
-            document.createElement(
-                "div"
-            );
-
-
-        day.className =
-            "day";
-
-
-        const date =
-            new Date(
-                year,
-                month,
-                dayNumber
-            );
-
-
-        const dateString =
-            formatDate(date);
-
-
-        const today =
-            formatDate(
-                new Date()
-            );
-
-
-        if (
-            dateString === today
-        ) {
-
-            day.classList.add(
-                "today"
-            );
-
-        }
-
-
-        /* Número */
-
-        const number =
-            document.createElement(
-                "div"
-            );
-
-        number.className =
-            "day-number";
-
-        number.textContent =
-            dayNumber;
-
-        day.appendChild(
-            number
-        );
-
-
-        /* Festivo */
-
-        if (
-            holidays[dateString]
-        ) {
-
-            day.classList.add(
-                "holiday-day"
-            );
-
-
-            const holiday =
-                document.createElement(
-                    "div"
-                );
-
-
-            holiday.className =
-                "holiday-name";
-
-
-            holiday.textContent =
-                "🇨🇴 " +
-                holidays[dateString];
-
-
-            day.appendChild(
-                holiday
-            );
-
-        }
-
-
-        /* Permisos */
-
-        const events =
-            getFilteredPermissions()
-                .filter(
-                    permission =>
-                        permission
-                            .fecha_ejecucion ===
-                        dateString
-                );
-
-
-        events.forEach(
-            permission => {
-
-                const event =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                event.className =
-                    "event estado-" +
-                    permission.estado;
-
-
-                event.innerHTML =
-
-                    "<strong>PO " +
-                    escapeHtml(
-                        permission.numero_po || ""
-                    ) +
-                    "</strong><br>" +
-
-                    escapeHtml(
-                        permission.actividad || ""
-                    );
-
-
-                event.onclick =
-                    () => {
-
-                        openEditPermission(
-                            permission
-                        );
-
-                    };
-
-
-                day.appendChild(
-                    event
-                );
-
-            }
-        );
-
-
-        calendar.appendChild(
-            day
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   FILTROS
-===================================================== */
-
-function getFilteredPermissions() {
-
-    const search =
-        document
-            .getElementById(
-                "searchInput"
-            )
-            .value
-            .toLowerCase()
-            .trim();
-
-
-    const estado =
-        document
-            .getElementById(
-                "filterEstado"
-            )
-            .value;
-
-
-    return permisos.filter(
-        permission => {
-
-
-            const text = [
-
-                permission.numero_po,
-
-                permission.actividad,
-
-                permission.municipio,
-
-                permission.zona,
-
-                permission.alimentador,
-
-                permission.cto,
-
-                permission.responsable,
-
-                permission.contratista,
-
-                permission.planeador
-
-            ]
-            .join(" ")
-            .toLowerCase();
-
-
-            return (
-
-                (!search ||
-                text.includes(search))
-
-                &&
-
-                (!estado ||
-                permission.estado === estado)
-
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   NUEVO
-===================================================== */
-
-function openNewPermission() {
-
-    editingId = null;
-
-
-    document
-        .getElementById(
-            "modalTitle"
-        )
-        .textContent =
-        "Nuevo permiso operativo";
-
-
-    clearForm();
-
-
-    document
-        .getElementById(
-            "estado"
-        )
-        .value =
-        "PLANEADO";
-
-
-    document
-        .getElementById(
-            "fecha_ejecucion"
-        )
-        .value =
-        formatDate(
-            new Date()
-        );
-
-
-    document
-        .getElementById(
-            "btnEliminar"
-        )
-        .style.display =
-        "none";
-
-
-    document
-        .getElementById(
-            "permissionModal"
-        )
-        .style.display =
-        "block";
-
-}
-
-
-/* =====================================================
-   EDITAR
-===================================================== */
-
-function openEditPermission(
-    permission
-) {
-
-    editingId =
-        permission.id;
-
-
-    document
-        .getElementById(
-            "modalTitle"
-        )
-        .textContent =
-        "Editar permiso operativo";
-
-
-    setValue(
-        "permissionId",
-        permission.id
-    );
-
-
-    setValue(
-        "numero_po",
-        permission.numero_po
-    );
-
-
-    setValue(
-        "actividad",
-        permission.actividad
-    );
-
-
-    setValue(
-        "fecha_ejecucion",
-        permission.fecha_ejecucion
-    );
-
-
-    setValue(
-        "hora_inicio",
-        permission.hora_inicio
-    );
-
-
-    setValue(
-        "hora_fin",
-        permission.hora_fin
-    );
-
-
-    setValue(
-        "municipio",
-        permission.municipio
-    );
-
-
-    setValue(
-        "zona",
-        permission.zona
-    );
-
-
-    setValue(
-        "alimentador",
-        permission.alimentador
-    );
-
-
-    setValue(
-        "cto",
-        permission.cto
-    );
-
-
-    setValue(
-        "responsable",
-        permission.responsable
-    );
-
-
-    setValue(
-        "contratista",
-        permission.contratista
-    );
-
-
-    setValue(
-        "planeador",
-        permission.planeador
-    );
-
-
-    setValue(
-        "estado",
-        permission.estado
-    );
-
-
-    setValue(
-        "fecha_solicitud",
-        permission.fecha_solicitud
-    );
-
-
-    setValue(
-        "fecha_aprobacion",
-        permission.fecha_aprobacion
-    );
-
-
-    setValue(
-        "fecha_ejecucion_real",
-        permission.fecha_ejecucion_real
-    );
-
-
-    setValue(
-        "observaciones",
-        permission.observaciones
-    );
-
-
-    document
-        .getElementById(
-            "btnEliminar"
-        )
-        .style.display =
-        "inline-block";
-
-
-    document
-        .getElementById(
-            "permissionModal"
-        )
-        .style.display =
-        "block";
-
-}
-
-
-/* =====================================================
-   GUARDAR
-===================================================== */
-
-async function savePermission() {
-
-    const data = {
-
-        numero_po:
-            getValue("numero_po"),
-
-        actividad:
-            getValue("actividad"),
-
-        fecha_ejecucion:
-            getValue("fecha_ejecucion")
-            || null,
-
-        hora_inicio:
-            getValue("hora_inicio")
-            || null,
-
-        hora_fin:
-            getValue("hora_fin")
-            || null,
-
-        municipio:
-            getValue("municipio"),
-
-        zona:
-            getValue("zona"),
-
-        alimentador:
-            getValue("alimentador"),
-
-        cto:
-            getValue("cto"),
-
-        responsable:
-            getValue("responsable"),
-
-        contratista:
-            getValue("contratista"),
-
-        planeador:
-            getValue("planeador"),
-
-        estado:
-            getValue("estado"),
-
-        fecha_solicitud:
-            getValue("fecha_solicitud")
-            || null,
-
-        fecha_aprobacion:
-            getValue("fecha_aprobacion")
-            || null,
-
-        fecha_ejecucion_real:
-            getValue("fecha_ejecucion_real")
-            || null,
-
-        observaciones:
-            getValue("observaciones")
-
-    };
-
-
-    if (!data.actividad) {
-
-        showFormMessage(
-            "La actividad es obligatoria.",
-            false
-        );
-
-        return;
-    }
-
-
-    let result;
-
-
-    if (editingId) {
-
-        result =
-            await supabaseClient
-                .from("permisos")
-                .update(data)
-                .eq(
-                    "id",
-                    editingId
-                );
-
-    }
-    else {
-
-        result =
-            await supabaseClient
-                .from("permisos")
-                .insert([
-                    data
-                ]);
-
-    }
-
-
-    if (result.error) {
-
-        showFormMessage(
-            "Error guardando el permiso: " +
-            result.error.message,
-            false
-        );
-
-        return;
-    }
-
-
-    await loadPermissions();
-
-
-    closeModal();
-
-
-    alert(
-        editingId
-            ? "Permiso actualizado correctamente."
-            : "Permiso creado correctamente."
-    );
-
-}
-
-
-/* =====================================================
-   ELIMINAR PERMISO
-   FUNCIÓN CORREGIDA
-===================================================== */
-
-async function deletePermission() {
-
-
-    if (!editingId) {
-
-        return;
-
-    }
-
-
-    /*
-       Buscar el permiso en memoria.
-    */
-
-    const permission =
-        permisos.find(
-            p =>
-                String(p.id) ===
-                String(editingId)
-        );
-
-
-    if (!permission) {
-
-        alert(
-            "No se encontró el permiso seleccionado."
-        );
-
-        return;
-
-    }
-
-
-    const numeroPO =
-        permission.numero_po ||
-        editingId;
-
-
-    /*
-       Confirmación.
-    */
-
-    const confirmar =
-        confirm(
-
-            "¿Está seguro de eliminar el permiso PO " +
-            numeroPO +
-            "?\n\n" +
-
-            "Actividad: " +
-            (
-                permission.actividad ||
-                "Sin descripción"
-            ) +
-            "\n\n" +
-
-            "Fecha: " +
-            (
-                permission.fecha_ejecucion ||
-                "Sin fecha"
-            ) +
-            "\n\n" +
-
-            "Esta acción no se puede deshacer."
-
-        );
-
-
-    if (!confirmar) {
-
-        return;
-
-    }
-
-
-    try {
-
-
-        /*
-           ELIMINAR DE SUPABASE
-
-           IMPORTANTE:
-           .select() permite verificar
-           que realmente se eliminó
-           una fila.
-        */
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("permisos")
-                .delete()
-                .eq(
-                    "id",
-                    editingId
-                )
-                .select();
-
-
-        /*
-           Error de Supabase.
-        */
-
-        if (error) {
-
-            console.error(
-                "ERROR DELETE:",
-                error
-            );
-
-
-            showFormMessage(
-
-                "No fue posible eliminar el permiso.\n\n" +
-
-                error.message,
-
-                false
-
-            );
-
-
-            return;
-
-        }
-
-
-        /*
-           Si data está vacío,
-           ninguna fila fue eliminada.
-        */
-
-        if (
-            !data ||
-            data.length === 0
-        ) {
-
-
-            console.error(
-                "DELETE NO AFECTÓ FILAS",
-                {
-                    id:
-                        editingId,
-
-                    data:
-                        data
-                }
-            );
-
-
-            showFormMessage(
-
-                "El permiso NO fue eliminado de la base de datos.\n\n" +
-
-                "Supabase no devolvió ninguna fila eliminada.\n\n" +
-
-                "Esto normalmente indica que la política RLS de DELETE no permite eliminar este registro.",
-
-                false
-
-            );
-
-
-            return;
-
-        }
-
-
-        /*
-           AQUÍ SABEMOS QUE SÍ SE ELIMINÓ.
-        */
-
-        console.log(
-            "PERMISO ELIMINADO:",
-            data
-        );
-
-
-        /*
-           Eliminar inmediatamente
-           de la memoria local.
-        */
-
-        permisos =
-            permisos.filter(
-
-                p =>
-                    String(p.id) !==
-                    String(editingId)
-
-            );
-
-
-        /*
-           Actualizar indicadores.
-        */
-
-        updateDashboard();
-
-
-        /*
-           Actualizar calendario.
-        */
-
-        renderCalendar();
-
-
-        /*
-           Limpiar ID.
-        */
-
-        editingId = null;
-
-
-        /*
-           Cerrar ventana.
-        */
-
-        closeModal();
-
-
-        /*
-           Confirmación.
-        */
-
-        alert(
-
-            "✅ El permiso PO " +
-            numeroPO +
-            " fue eliminado correctamente."
-
-        );
-
-
-        /*
-           Volver a consultar Supabase.
-        */
-
-        await loadPermissions();
-
-
-    }
-    catch (error) {
-
-
-        console.error(
-            "ERROR INESPERADO:",
-            error
-        );
-
-
-        showFormMessage(
-
-            "Ocurrió un error inesperado:\n\n" +
-            error.message,
-
-            false
-
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   MENSAJE FORMULARIO
-===================================================== */
-
-function showFormMessage(
-    message,
-    success
-) {
-
-    const box =
-        document.getElementById(
-            "formMessage"
-        );
-
-
-    box.textContent =
-        message;
-
-
-    box.className =
-        success
-            ? "message message-success"
-            : "message message-error";
-
-
-    box.style.display =
-        "block";
-
-}
-
-
-/* =====================================================
-   LIMPIAR
-===================================================== */
-
-function clearForm() {
-
-
-    const fields = [
-
-        "permissionId",
-
-        "numero_po",
-
-        "actividad",
-
-        "fecha_ejecucion",
-
-        "hora_inicio",
-
-        "hora_fin",
-
-        "municipio",
-
-        "zona",
-
-        "alimentador",
-
-        "cto",
-
-        "responsable",
-
-        "contratista",
-
-        "planeador",
-
-        "fecha_solicitud",
-
-        "fecha_aprobacion",
-
-        "fecha_ejecucion_real",
-
-        "observaciones"
-
-    ];
-
-
-    fields.forEach(
-        id => {
-
-            const element =
-                document.getElementById(
-                    id
-                );
-
-
-            if (element) {
-
-                element.value =
-                    "";
-
-            }
-
-        }
-    );
-
-
-    document
-        .getElementById(
-            "formMessage"
-        )
-        .style.display =
-        "none";
-
-}
-
-
-/* =====================================================
-   CERRAR MODAL
-===================================================== */
-
-function closeModal() {
-
-    document
-        .getElementById(
-            "permissionModal"
-        )
-        .style.display =
-        "none";
-
-}
-
-
-/* =====================================================
-   CAMBIO DE MES
-===================================================== */
-
-function previousMonth() {
-
-    currentDate.setMonth(
-        currentDate.getMonth() - 1
-    );
-
-    renderCalendar();
-
-}
-
-
-function nextMonth() {
-
-    currentDate.setMonth(
-        currentDate.getMonth() + 1
-    );
-
-    renderCalendar();
-
-}
-
-
-function goToday() {
-
-    currentDate =
-        new Date();
-
-    renderCalendar();
-
-}
-
-
-/* =====================================================
-   AUXILIARES
-===================================================== */
-
-function getValue(id) {
-
-    const element =
-        document.getElementById(
-            id
-        );
-
-
-    if (!element) {
-
-        return "";
-
-    }
-
-
-    return element.value.trim();
-
-}
-
-
-function setValue(
-    id,
-    value
-) {
-
-    const element =
-        document.getElementById(
-            id
-        );
-
-
-    if (element) {
-
-        element.value =
-            value || "";
-
-    }
-
-}
-
-
-function formatDate(date) {
-
-    const year =
-        date.getFullYear();
-
-
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return (
-
-        year +
-        "-" +
-        month +
-        "-" +
-        day
-
-    );
-
-}
-
-
-function escapeHtml(value) {
-
-    if (
-        value === null ||
-        value === undefined
-    ) {
-
-        return "";
-
-    }
-
-
-    return String(value)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
-
-}
-
-
-/* =====================================================
-   COMPROBAR SESIÓN
-===================================================== */
-
-async function checkSession() {
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .auth
-            .getSession();
-
-
-    if (error) {
-
-        console.error(
-            "Error comprobando sesión:",
-            error
-        );
-
-        return;
-
-    }
-
-
-    if (
-        data &&
-        data.session &&
-        data.session.user
-    ) {
-
-        showApplication(
-            data.session.user
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   CAMBIOS DE AUTENTICACIÓN
-===================================================== */
-
-supabaseClient
-    .auth
-    .onAuthStateChange(
-
-        (
-            event,
-            session
-        ) => {
-
-
-            if (
-
-                event ===
-                "SIGNED_IN"
-
-                &&
-
-                session
-
-                &&
-
-                session.user
-
-            ) {
-
-                showApplication(
-                    session.user
-                );
-
-            }
-
-        }
-
-    );
-
-
-/* =====================================================
-   TIEMPO REAL
-===================================================== */
-
-supabaseClient
-
-    .channel(
-        "permisos-realtime"
-    )
-
-    .on(
-
-        "postgres_changes",
-
-        {
-
-            event: "*",
-
-            schema: "public",
-
-            table: "permisos"
-
-        },
-
-        () => {
-
-            loadPermissions();
-
-        }
-
-    )
-
-    .subscribe();
-
-
-/* =====================================================
-   INICIAR
-===================================================== */
-
-checkSession();
-
-
-</script>
-
-</body>
-
-</html>
